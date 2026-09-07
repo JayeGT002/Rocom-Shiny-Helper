@@ -48,67 +48,6 @@
       "attrFull": "幻"
     },
     {
-      "name": "流明坎德拉",
-      "attr": "火",
-      "value": 80,
-      "stages": [
-        "守夜烛",
-        "流明坎德拉"
-      ],
-      "season": "S3 铅字幻梦",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 6000,
-      "obtain": "S3赛季奇遇作业获取",
-      "attrFull": "火 / 光"
-    },
-    {
-      "name": "乌拉塔",
-      "attr": "恶",
-      "value": 60,
-      "stages": [
-        "乌达",
-        "迷你乌",
-        "乌拉塔"
-      ],
-      "season": "常驻精灵",
-      "forms": [
-        {
-          "name": "乌拉塔（极昼的样子）",
-          "season": "常驻精灵"
-        },
-        {
-          "name": "乌拉塔（极夜的样子）",
-          "season": "常驻精灵",
-          "attr": "恶",
-          "attrFull": "恶/冰"
-        }
-      ],
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "恶/火"
-    },
-    {
-      "name": "伊兰亚龙",
-      "attr": "龙",
-      "value": 60,
-      "stages": [
-        "伊雷龙",
-        "伊兰亚龙"
-      ],
-      "season": "常驻精灵",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "图鉴数量奖励",
-      "attrFull": "龙"
-    },
-    {
       "name": "公平鸽",
       "attr": "普通",
       "value": 56,
@@ -139,41 +78,6 @@
       "coin": 6000,
       "obtain": "图鉴数量奖励",
       "attrFull": "冰"
-    },
-    {
-      "name": "化蝶",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "毛毛",
-        "爬爬",
-        "化蝶"
-      ],
-      "season": "常驻精灵",
-      "forms": [
-        {
-          "name": "化蝶（平常的样子）",
-          "season": "常驻精灵"
-        },
-        {
-          "name": "化蝶（幽冥眼的样子）",
-          "season": "常驻精灵"
-        },
-        {
-          "name": "化蝶（喵喵的样子）",
-          "season": "常驻精灵"
-        },
-        {
-          "name": "化蝶（奇丽花的样子）",
-          "season": "常驻精灵"
-        }
-      ],
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "虫/萌"
     },
     {
       "name": "厉毒修萝",
@@ -295,6 +199,22 @@
       "attrFull": "龙/幽"
     },
     {
+      "name": "伊兰亚龙",
+      "attr": "龙",
+      "value": 60,
+      "stages": [
+        "伊雷龙",
+        "伊兰亚龙"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "龙"
+    },
+    {
       "name": "尖嘴狐仙",
       "attr": "火",
       "value": 80,
@@ -310,23 +230,6 @@
       "coin": 6000,
       "obtain": "抓20只最高阶课题领取",
       "attrFull": "火/电"
-    },
-    {
-      "name": "彩蝶鲨",
-      "attr": "水",
-      "value": 60,
-      "stages": [
-        "风铃鲨",
-        "蓝蝶鲨",
-        "彩蝶鲨"
-      ],
-      "season": "常驻精灵",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "水/翼"
     },
     {
       "name": "怒目怂猫",
@@ -439,6 +342,35 @@
       "attrFull": "恶"
     },
     {
+      "name": "乌拉塔",
+      "attr": "恶",
+      "value": 60,
+      "stages": [
+        "乌达",
+        "迷你乌",
+        "乌拉塔"
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "乌拉塔（极昼的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "乌拉塔（极夜的样子）",
+          "season": "常驻精灵",
+          "attr": "恶",
+          "attrFull": "恶/冰"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "恶/火"
+    },
+    {
       "name": "梦悠悠",
       "attr": "幽",
       "value": 60,
@@ -463,23 +395,6 @@
       "coin": 4500,
       "obtain": "抓20只最高阶课题领取",
       "attrFull": "幽"
-    },
-    {
-      "name": "波多西",
-      "attr": "机械",
-      "value": 80,
-      "stages": [
-        "多西",
-        "库多西",
-        "波多西"
-      ],
-      "season": "常驻精灵",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 6000,
-      "obtain": "图鉴数量奖励",
-      "attrFull": "机械/地"
     },
     {
       "name": "泥吼牙",
@@ -529,6 +444,23 @@
       "attrFull": "水"
     },
     {
+      "name": "彩蝶鲨",
+      "attr": "水",
+      "value": 60,
+      "stages": [
+        "风铃鲨",
+        "蓝蝶鲨",
+        "彩蝶鲨"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "水/翼"
+    },
+    {
       "name": "混乱鱿彩",
       "attr": "幽",
       "value": 60,
@@ -562,6 +494,22 @@
       "attrFull": "火"
     },
     {
+      "name": "流明坎德拉",
+      "attr": "火",
+      "value": 60,
+      "stages": [
+        "守夜烛",
+        "流明坎德拉"
+      ],
+      "season": "S3 铅字幻梦",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "S3赛季奇遇作业获取",
+      "attrFull": "火 / 光"
+    },
+    {
       "name": "电企鹅",
       "attr": "电",
       "value": 80,
@@ -576,23 +524,6 @@
       "coin": 6000,
       "obtain": "抓20只最高阶课题领取",
       "attrFull": "电/电"
-    },
-    {
-      "name": "电球咩咩",
-      "attr": "电",
-      "value": 60,
-      "stages": [
-        "电咩咩",
-        "粉咩咩",
-        "电球咩咩"
-      ],
-      "season": "常驻精灵",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "电"
     },
     {
       "name": "白金独角兽",
@@ -658,40 +589,6 @@
       "coin": 4500,
       "obtain": "图鉴数量奖励",
       "attrFull": "龙/翼"
-    },
-    {
-      "name": "芋香巨角蛛",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "圆眼蜘蛛",
-        "尖角蜘蛛",
-        "芋香巨角蛛"
-      ],
-      "season": "常驻精灵",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "虫/毒"
-    },
-    {
-      "name": "花衣蝶",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "小草虫",
-        "草衣虫",
-        "花衣蝶"
-      ],
-      "season": "常驻精灵",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "虫/草"
     },
     {
       "name": "菊花梨",
@@ -777,20 +674,21 @@
       "attrFull": "机械/幻"
     },
     {
-      "name": "酷拉",
-      "attr": "电",
-      "value": 60,
+      "name": "波多西",
+      "attr": "机械",
+      "value": 80,
       "stages": [
-        "拉特",
-        "酷拉"
+        "多西",
+        "库多西",
+        "波多西"
       ],
       "season": "常驻精灵",
       "notBeforeSeason": "",
       "notAfterSeason": "",
       "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "电"
+      "coin": 6000,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "机械/地"
     },
     {
       "name": "铠甲虫",
@@ -809,6 +707,58 @@
       "attrFull": "虫"
     },
     {
+      "name": "花衣蝶",
+      "attr": "虫",
+      "value": 60,
+      "stages": [
+        "小草虫",
+        "草衣虫",
+        "花衣蝶"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "虫/草"
+    },
+    {
+      "name": "化蝶",
+      "attr": "虫",
+      "value": 60,
+      "stages": [
+        "毛毛",
+        "爬爬",
+        "化蝶"
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "化蝶（平常的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "化蝶（幽冥眼的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "化蝶（喵喵的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "化蝶（奇丽花的样子）",
+          "season": "常驻精灵"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "虫/萌"
+    },
+    {
       "name": "锤头鹳",
       "attr": "翼",
       "value": 60,
@@ -822,23 +772,6 @@
       "coin": 4500,
       "obtain": "抓20只最高阶课题领取",
       "attrFull": "翼/水"
-    },
-    {
-      "name": "高脚鹬",
-      "attr": "翼",
-      "value": 60,
-      "stages": [
-        "小鹬",
-        "鄙目鹬",
-        "高脚鹬"
-      ],
-      "season": "常驻精灵",
-      "notBeforeSeason": "",
-      "notAfterSeason": "",
-      "mixPool": "",
-      "coin": 4500,
-      "obtain": "抓20只最高阶课题领取",
-      "attrFull": "翼"
     },
     {
       "name": "龙鱼",
