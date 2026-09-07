@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>洛克王国赛季异色属性池匹配器</title>
+  <style>
+    @font-face {
+      font-family: 'MIANFEIZITI';
+      src: url('fonts/MIANFEIZITI.ttf') format('truetype');
+      font-display: swap;
+    }
+    :root {
+      --font-game: 'MIANFEIZITI', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      --font-text: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-game);
+      background: #f5f6f8; color: #1a1a2e; padding: 28px; line-height: 1.5;
+      zoom: 0.9; /* 页面整体缩放至 90% */
+    }
+    /* 说明性文字保持系统字体，不更换 */
+    .header-title p, .notice, .empty-state, .loading,
+    .recommend-group-header .count, .region-hint { font-family: var(--font-text); }
+    .container { max-width: 1280px; margin: 0 auto; }
+
+    .header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+    }
+    .header-title h1 { font-size: 26px; margin-bottom: 4px; }
+    .header-title p { font-size: 15px; color: #888; }
+    .season-select { min-width: 220px; }
+    .season-select label { display: block; font-size: 15px; font-weight: 600; margin-bottom: 6px; color: #333; }
+    .season-select select {
+      width: 100%; padding: 12px 16px; border-radius: 10px; border: 2px solid #dee2e6;
+      font-size: 16px; background: white; cursor: pointer; outline: none; color: #333;
+    }
+
+    .loading { text-align: center; padding: 48px; color: #666; }
+
+    .filter-grid { display: grid; gap: 20px; margin-bottom: 24px; }
+
+    .filter-box {
+      border-radius: 16px; padding: 24px; border: 1px solid;
+    }
+    .filter-box-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 16px;
+    }
+    .filter-box-header h3 { font-size: 17px; margin: 0; }
+
+    .checkbox-group {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+    /* 筛选区左右两个分类并列时，每个分类内一行 3 张卡片 */
+    .checkbox-group.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    /* 精灵星系卡片（参考 wiki 精灵图鉴） */
+    .sprite-card {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      padding: 14px 10px 12px;
+      background: white; border-radius: 14px;
+      border: 2px solid #e8e8e8;
+      cursor: pointer; transition: all 0.15s; user-select: none;
+    }
+    .sprite-card:hover { border-color: #c8c8c8; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+    .sprite-card.selected {
+      border-color: var(--accent, #666);
+      background: var(--accent-bg, rgba(0,0,0,0.04));
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+    .sprite-card.selected::after {
+      content: '✓'; position: absolute; top: 5px; right: 12px;
+      color: var(--accent, #666); font-weight: 700; font-size: 18px;
+    }
+    .sprite-card input[type="checkbox"] { position: absolute; opacity: 0; pointer-events: none; }
+    .sprite-img-wrap {
+      position: relative; width: 120px; height: 120px;
+      background: transparent; border-radius: 12px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sprite-img-wrap::before { content: '暂无图片'; font-size: 13px; color: #b8bcc4; }
+    .sprite-img { width: 100%; height: 100%; object-fit: contain; }
+    /* 精灵/可定向/推荐卡片名称：主名一行 + 括号形态副行（小字灰色）；无括号也保留副行高度使卡片等高 */
+    .sprite-name, .dc-name, .rc-name {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-align: center;
+      line-height: 1.25;
+    }
+    .nm-main { font-size: inherit; }
+    .nm-sub {
+      font-size: 12px; font-weight: 400; color: #9aa0a6;
+      min-height: 1.2em; line-height: 1.2; white-space: nowrap;
+    }
+    .sprite-name { font-weight: 700; font-size: 15px; color: #1a1a2e; }
+    .sprite-attrs { display: flex; gap: 6px; min-height: 24px; flex-wrap: wrap; justify-content: center; }
+    .sprite-attr {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 13px; font-weight: 600; color: #555;
+    }
+    .sprite-attr img { width: 20px; height: 20px; border-radius: 50%; }
+
+    /* 赛季机制提示：标题 + 可折叠正文（背景 #B3BFD3，深色文字适配） */
+    .notice {
+      display: none;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      border: 1px solid #97a6c0;
+      background: #B3BFD3;
+      overflow: hidden;
+      font-size: 14px;
+      color: #1e2a42;
+    }
+    .notice-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px 18px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .notice-title {
+      font-weight: 700;
+      font-size: 15px;
+      color: #16203a;
+      line-height: 1.5;
+    }
+    .notice-arrow {
+      flex-shrink: 0;
+      font-size: 13px;
+      color: #16203a;
+      transition: transform 0.25s ease;
+    }
+    .notice.open .notice-arrow { transform: rotate(180deg); }
+    .notice-body { display: none; padding: 0 18px 16px; }
+    .notice.open .notice-body { display: block; }
+    .notice-body p { margin: 0 0 8px; color: #1e2a42; }
+    .notice-body p:last-child { margin-bottom: 0; }
+    .notice-body .notice-sub { font-weight: 600; margin: 6px 0 2px; }
+
+    /* 地区形态提示（如刺轮砣：上弦的样子 / 下弦的样子） */
+    .region-hint {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #eef4ff;
+      border: 1px solid #c6d8f5;
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-bottom: 18px;
+      font-size: 15px;
+      color: #2b4a7a;
+    }
+    .region-hint .region-hint-title {
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 8px;
+      background: #dbe8ff;
+      color: #1f3a66;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    /* 分类方式切换开关 */
+    .mode-switch {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 18px; flex-wrap: wrap;
+    }
+    .mode-label { font-size: 15px; font-weight: 600; color: #333; white-space: nowrap; }
+    .mode-buttons {
+      display: inline-flex; background: #eceef1; border-radius: 10px;
+      padding: 4px; gap: 3px;
+    }
+    .mode-btn {
+      padding: 8px 16px; border: none; border-radius: 8px;
+      background: transparent; font-size: 15px; font-weight: 600;
+      color: #666; cursor: pointer; transition: all 0.15s;
+    }
+    .mode-btn.active { background: white; color: #1565c0; box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
+
+    /* 属性筛选开关 */
+    .attr-filter {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 18px; flex-wrap: wrap;
+    }
+    .attr-filter-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .attr-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px 6px 6px; border-radius: 18px;
+      border: 1.5px solid #d5d9e0; background: white;
+      font-size: 14px; font-weight: 600; color: #444;
+      font-family: var(--font-game);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .attr-btn:hover { border-color: #aab2bd; }
+    .attr-btn img { width: 22px; height: 22px; border-radius: 50%; }
+    .attr-btn.active { border-color: var(--ac); background: var(--abg); color: var(--ac); }
+    .attr-btn.all { padding: 6px 14px; }
+
+    /* 属性筛选下不可命中精灵：置灰不可选 */
+    .sprite-card.disabled {
+      opacity: 0.4; pointer-events: none;
+      filter: grayscale(0.5);
+    }
+
+    .attr-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px 5px 6px; border-radius: 16px;
+      font-weight: 700; margin-right: 6px; border: 1px solid;
+      font-size: 15px; text-shadow: none;
+    }
+    .attr-tag img { width: 22px; height: 22px; border-radius: 50%; }
+
+    /* 命中属性：并入推荐高星光值刷取精灵区块顶部 */
+    .recommend-hit-attrs {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .recommend-hit-attrs .label { font-weight: 600; color: #4527a0; font-size: 15px; white-space: nowrap; }
+
+    .directable-section {
+      display: none;
+      background: #e8f5e9;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #c8e6c9;
+      margin-bottom: 18px;
+    }
+    .directable-section h3 {
+      margin: 0 0 16px 0;
+      color: #2e7d32;
+      font-size: 19px;
+    }
+    .directable-subtitle {
+      font-weight: 700;
+      color: #333;
+      font-size: 16px;
+      margin: 14px 0 10px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed #a5d6a7;
+    }
+    .directable-subtitle:first-of-type { margin-top: 0; }
+    .directable-list {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+    /* 可定向精灵卡片：与上方筛选器精灵卡片一致的竖向样式（图 + 名称 + 属性），底部一行属性池 + 机制tag */
+    .directable-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      background: white;
+      border-radius: 14px;
+      border: 2px solid #e8e8e8;
+      padding: 14px;
+      transition: all 0.15s;
+    }
+    .directable-card:hover { border-color: #c8c8c8; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+    .dc-top {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; width: 100%; text-align: center;
+    }
+    .dc-img-wrap {
+      position: relative; flex-shrink: 0; width: 100px; height: 100px;
+      background: transparent; border-radius: 12px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .dc-img-wrap::before { content: '暂无图片'; font-size: 13px; color: #b8bcc4; }
+    .dc-img { width: 100%; height: 100%; object-fit: contain; }
+    .dc-info { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+    .dc-name { font-weight: 700; font-size: 15px; color: #1a1a2e; }
+    .dc-attrs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+    .dc-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      width: 100%;
+      padding: 8px 10px; background: #f8f9fa; border-radius: 8px;
+      border: 1px solid #e9ecef;
+    }
+    .dc-pool {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 14px; font-weight: 600; color: #555; white-space: nowrap;
+    }
+    .dc-pool img { width: 18px; height: 18px; border-radius: 50%; }
+    .method-tag {
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      color: white;
+      white-space: nowrap;
+    }
+
+    .recommend-section {
+      display: none;
+      background: #ede7f6;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #d1c4e9;
+    }
+    .recommend-section h3 {
+      margin: 0 0 16px 0;
+      color: #4527a0;
+      font-size: 19px;
+    }
+
+    .recommend-group {
+      background: white;
+      border-radius: 12px;
+      padding: 14px 16px;
+      border: 1px solid #e0e0e0;
+      margin-bottom: 14px;
+    }
+    .recommend-group:last-child { margin-bottom: 0; }
+    .recommend-group-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .recommend-group-header .dot {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+    }
+    .recommend-group-header .attr-name {
+      font-weight: 700;
+      color: #333;
+      font-size: 18px;
+    }
+    .recommend-group-header .count {
+      color: #999;
+      font-size: 13px;
+    }
+    /* 定向 tag：属性池定向 / 赛季机制定向（可内嵌金月/赤月）/ 不可定向 */
+    .recommend-group-header .dir-method {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      color: white;
+      line-height: 1.3;
+    }
+    .recommend-group-header .dir-method.pool { background: #e65100; }
+    .recommend-group-header .dir-method.mech {
+      background: #71C2F9;
+      color: #3D4F1F; /* BFDE7B 加深后的文字色 */
+    }
+    .recommend-group-header .dir-method.mech .m-sub {
+      display: inline-block;
+      color: white;
+      padding: 0 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .recommend-group-header .dir-method.none { background: #aeb4bc; }
+    .recommend-items {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+    }
+    /* 推荐高星光值精灵卡片：与筛选精灵卡同款版式（透明立绘 + 两行名称 + 图标信息行） */
+    .recommend-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      background: white;
+      border-radius: 14px;
+      border: 2px solid #e8e8e8;
+      padding: 14px 10px 12px;
+      transition: all 0.15s;
+    }
+    .recommend-card:hover { border-color: #c8c8c8; box-shadow: 0 4px 10px rgba(0,0,0,0.06); }
+    .rc-img-wrap {
+      position: relative; flex-shrink: 0; width: 120px; height: 120px;
+      background: transparent; border-radius: 12px; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rc-img-wrap::before { content: '暂无图片'; font-size: 13px; color: #b8bcc4; }
+    .rc-img { width: 100%; height: 100%; object-fit: contain; }
+    .rc-name { font-weight: 700; font-size: 15px; color: #1a1a2e; text-align: center; }
+    /* 卡内信息两行：第一行「第一属性：图标+属性」，第二行 星光值 + 阶段（浅蓝胶囊气泡） */
+    .rc-attr {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: #8a6d3b;
+      white-space: nowrap;
+    }
+    .rc-attr .rc-attr-label { font-weight: 600; color: #8a6d3b; }
+    .rc-attr .rc-attr-ico { width: 16px; height: 16px; border-radius: 50%; }
+    .rc-attr .rc-attr-name { font-weight: 600; color: #6b5421; }
+    .rc-foot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      min-height: 22px;
+    }
+    .rc-star {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #3a3f47;
+      white-space: nowrap;
+    }
+    .rc-star img { width: 18px; height: 18px; }
+    /* 阶段浅蓝胶囊气泡 */
+    .rc-stage {
+      background: #dff1ff;
+      color: #0b6bcb;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 1px 10px;
+      border-radius: 999px;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 15px;
+    }
+
+    /* 页脚声明 */
+    .footer {
+      margin-top: 36px;
+      padding: 18px 22px 8px;
+      border-top: 1px solid #dde1e6;
+      color: #8a919c;
+      font-size: 12px;
+      line-height: 2;
+      font-family: var(--font-text);
+    }
+    .footer p { margin: 0 0 6px; }
+
+    /* ==================== 图片占位符：有图时隐藏占位文字 ==================== */
+    .sprite-img-wrap.has-img::before,
+    .dc-img-wrap.has-img::before,
+    .rc-img-wrap.has-img::before { content: none; }
+
+    /* ==================== 常规/异色图交替（S1~S3，双图交叠平滑过渡） ==================== */
+    /* 开启交替的图片容器：两层 <img> 上下堆叠，通过 opacity 交叠淡入淡出 */
+    .sw-ready > img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: opacity 2.4s ease-in-out;
+    }
+    .sprite-img, .dc-img, .rc-img { transition: opacity 2.4s ease-in-out; }
+
+    @media (max-width: 1050px) {
+      /* 两个分类并列时每格变窄，精灵图适当缩小避免溢出 */
+      .sprite-img-wrap { width: 100px; height: 100px; }
+    }
+
+    @media (max-width: 900px) {
+      .checkbox-group { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+      .directable-list, .recommend-items { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+    }
+
+    @media (max-width: 768px) {
+      .filter-grid { grid-template-columns: 1fr !important; }
+      .header { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 16px; }
+      .header-title h1 { font-size: 22px; }
+      .filter-box, .directable-section, .recommend-section { padding: 16px; }
+      .sprite-card { padding: 12px 8px 10px; gap: 6px; }
+      .checkbox-group { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+      .sprite-img-wrap, .dc-img-wrap, .rc-img-wrap { width: 84px; height: 84px; }
+      .directable-card, .recommend-card { width: 100%; }
+      .directable-list, .recommend-items { grid-template-columns: 1fr; }
+      .dc-row { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-title">
+        <h1>赛季异色属性池匹配器</h1>
+        <p>勾选目标精灵，自动匹配最优刷取方案</p>
+      </div>
+      <div class="season-select">
+        <label>赛季选择</label>
+        <select id="season-select">
+          <option value="">加载中...</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="loading" id="loading">正在加载赛季数据...</div>
+
+    <div id="app-content" style="display: none;">
+      <div class="notice" id="season-notice"></div>
+
+      <div class="mode-switch" id="mode-switch" style="display: none;">
+        <span class="mode-label">分类方式</span>
+        <div class="mode-buttons" id="mode-buttons"></div>
+      </div>
+
+      <div class="attr-filter" id="attr-filter">
+        <span class="mode-label">属性筛选</span>
+        <div class="attr-filter-buttons" id="attr-filter-buttons"></div>
+      </div>
+
+      <div class="filter-grid" id="filter-grid"></div>
+
+      <div class="region-hint" id="region-hint"></div>
+
+      <div class="recommend-section" id="recommend-section">
+        <h3>推荐属性池</h3>
+        <div class="recommend-hit-attrs" id="recommend-hit-attrs"></div>
+        <div id="recommend-list"></div>
+      </div>
+    </div>
+
+    <div class="empty-state" id="empty-state">请在上方勾选目标精灵</div>
+
+    <footer class="footer">
+      <p>数据资源来自洛克王国世界WIKI，S4赛季奇遇精灵为预览版本。遵循上游共享协议CC BY-NC-SA 4.0（署名-非商业性使用-相同方式共享）</p>
+      <p>本网站是由《洛克王国：世界》游戏爱好者，使用DeepSeek V4 Flash制作。网站所涉及的公司名称、商标、产品等均为其各自所有者的资产，仅供识别。</p>
+      <p>网站内使用的游戏图片、动画、音频、文本原文，仅用于更好地表现游戏资料，其版权归属《洛克王国：世界》项目组所有。</p>
+      <p>开源协议MIT</p>
+    </footer>
+  </div>
+
+  <script>
+    // ==================== 配置 ====================
+    const BASE_PATH = '.';
+
+    // 属性颜色：从 images/attrs/ 属性图标中提取的主色
+    const attrColors = {
+      "普通": "#3080B0", "草": "#40B070", "火": "#D05020", "水": "#60A0F0",
+      "光": "#40C0F0", "地": "#907030", "冰": "#50A0D0", "龙": "#E04060",
+      "电": "#E0C000", "毒": "#B060E0", "虫": "#90C020", "武": "#F09030",
+      "翼": "#30C0C0", "萌": "#F070A0", "幽": "#9040E0", "恶": "#C04070",
+      "机械": "#40C0A0", "幻": "#90A0F0"
+    };
+
+    // ==================== 状态 ====================
+    let seasonsConfig = [];
+    let currentSeasonData = null;
+    let highValueSprites = [];
+    let selectedSprites = new Set(); // 单选：最多包含 1 个元素
+    // 属性筛选：'' = 全部，否则为单个属性名（单选）
+    let selectedAttr = '';
+    // 分类方式：mechanism=赛季机制分类（filterGroups），category=赛季奇遇/常驻异色分类（categoryGroups）
+    let filterMode = 'mechanism';
+
+    // 分类方式定义（开关按钮展示文案）
+    const FILTER_MODES = [
+      { key: 'mechanism', label: '赛季机制', groupField: 'group', groupsKey: 'filterGroups' },
+      { key: 'category', label: '赛季奇遇/常驻异色', groupField: 'group2', groupsKey: 'categoryGroups' }
+    ];
+
+    // 当前分类方式下的分组列表
+    function getFilterGroups() {
+      const mode = FILTER_MODES.find(m => m.key === filterMode) || FILTER_MODES[0];
+      return (currentSeasonData[mode.groupsKey] || currentSeasonData.filterGroups || []);
+    }
+
+    // 当前分类方式下精灵所属分组 key
+    function getSpriteGroupKey(sprite) {
+      const mode = FILTER_MODES.find(m => m.key === filterMode) || FILTER_MODES[0];
+      return sprite[mode.groupField] || sprite.group || '';
+    }
+
+    // ==================== 初始化 ====================
+    async function init() {
+      try {
+        const seasonsRes = await fetch(`${BASE_PATH}/data/seasons.json`);
+        const seasonsData = await seasonsRes.json();
+        seasonsConfig = seasonsData.seasons;
+
+        const hvRes = await fetch(`${BASE_PATH}/data/high_value_sprites.json`);
+        const hvData = await hvRes.json();
+        highValueSprites = hvData.sprites;
+
+        // 异色图清单（常规/异色交替用；未来赛季更新只需补充 data/yise_images.json）
+        try {
+          const yiseRes = await fetch(`${BASE_PATH}/data/yise_images.json`);
+          yiseImages = await yiseRes.json();
+        } catch (e) { /* 无清单则不做交替 */ }
+
+        const select = document.getElementById('season-select');
+        select.innerHTML = '';
+        seasonsConfig.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.id;
+          opt.textContent = `${s.id} ${s.name}`;
+          select.appendChild(opt);
+        });
+        select.addEventListener('change', (e) => loadSeason(e.target.value));
+
+        await loadSeason(seasonsConfig[0].id);
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('app-content').style.display = 'block';
+      } catch (err) {
+        document.getElementById('loading').textContent = '加载失败：' + err.message;
+        console.error(err);
+      }
+    }
+
+    // ==================== 加载赛季数据 ====================
+    async function loadSeason(seasonId) {
+      currentSeasonData = null;
+      selectedSprites.clear();
+      selectedAttr = '';
+      filterMode = 'mechanism';
+
+      const res = await fetch(`${BASE_PATH}/data/${seasonId}.json`);
+      currentSeasonData = await res.json();
+
+      // 赛季切换后清空交替队列，避免引用已移除的旧图片
+      swapItems.length = 0;
+
+      renderModeSwitch();
+      renderAttrFilter();
+      renderFilters();
+      updateResults();
+    }
+
+    // ==================== 渲染分类方式开关 ====================
+    // 仅当赛季配置了 categoryGroups 时显示开关（前端完全通用）
+    function renderModeSwitch() {
+      const wrap = document.getElementById('mode-switch');
+      const container = document.getElementById('mode-buttons');
+      const hasCategory = (currentSeasonData.categoryGroups || []).length > 0;
+      if (!hasCategory) {
+        wrap.style.display = 'none';
+        container.innerHTML = '';
+        return;
+      }
+      wrap.style.display = 'flex';
+      container.innerHTML = '';
+      FILTER_MODES.forEach(mode => {
+        const btn = document.createElement('button');
+        btn.className = 'mode-btn' + (mode.key === filterMode ? ' active' : '');
+        btn.dataset.mode = mode.key;
+        btn.textContent = mode.label;
+        btn.addEventListener('click', () => {
+          if (filterMode === mode.key) return;
+          filterMode = mode.key;
+          container.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === filterMode));
+          selectedSprites.clear();
+          renderFilters();
+          updateResults();
+        });
+        container.appendChild(btn);
+      });
+    }
+
+    // ==================== 渲染属性筛选开关 ====================
+    // 属性选项 = 当前赛季精灵包含的属性（去重，单选）
+    function renderAttrFilter() {
+      const container = document.getElementById('attr-filter-buttons');
+      container.innerHTML = '';
+
+      // 收集赛季内属性
+      const attrSet = new Set();
+      currentSeasonData.sprites.forEach(s => {
+        if (s.attr1) attrSet.add(s.attr1);
+        if (s.attr2) attrSet.add(s.attr2);
+      });
+      // 按属性色值表固定顺序排序，未知属性排最后
+      const order = Object.keys(attrColors);
+      const attrs = Array.from(attrSet).sort((a, b) => {
+        const ia = order.indexOf(a), ib = order.indexOf(b);
+        return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      });
+
+      const makeBtn = (attr, label, isAll) => {
+        const btn = document.createElement('button');
+        btn.className = 'attr-btn' + (isAll ? ' all' : '') + (attr === selectedAttr ? ' active' : '');
+        btn.dataset.attr = attr || 'all';
+        if (attr) {
+          const color = attrColors[attr] || '#666';
+          btn.style.setProperty('--ac', color);
+          btn.style.setProperty('--abg', hexToRgba(color, 0.12));
+          btn.innerHTML = `<img src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.png" alt="${attr}">${label}`;
+        } else {
+          btn.textContent = label;
+        }
+        btn.addEventListener('click', () => {
+          if (selectedAttr === attr) return;
+          selectedAttr = attr;
+          selectedSprites.clear();
+          container.querySelectorAll('.attr-btn').forEach(b => b.classList.toggle('active', b.dataset.attr === (attr || 'all')));
+          renderFilters();
+          updateResults();
+        });
+        container.appendChild(btn);
+      };
+
+      makeBtn('', '全部', true);
+      attrs.forEach(a => makeBtn(a, a, false));
+    }
+
+    // 同步所有精灵卡片的选中视觉（单选）
+    function syncSelectionUI() {
+      document.querySelectorAll('.sprite-card').forEach(card => {
+        const cb = card.querySelector('input[type="checkbox"]');
+        if (!cb) return;
+        const on = selectedSprites.has(cb.value);
+        cb.checked = on;
+        card.classList.toggle('selected', on);
+      });
+    }
+
+    // 精灵是否可命中某属性（自身属性 或 可定向属性池 包含该属性）
+    function canHitAttr(sprite, attr) {
+      if (!attr) return true;
+      if (sprite.attr1 === attr || sprite.attr2 === attr) return true;
+      const d = sprite.directable;
+      if (!d) return false;
+      return (d.pool || []).includes(attr) || (d.mechanism || []).includes(attr);
+    }
+
+    // ==================== 渲染筛选区（完全通用） ====================
+    function renderFilters() {
+      const grid = document.getElementById('filter-grid');
+      const notice = document.getElementById('season-notice');
+      const groups = getFilterGroups();
+
+      if (currentSeasonData.description) {
+        notice.style.display = 'block';
+        notice.classList.remove('open'); // 默认折叠
+        const title = currentSeasonData.noticeTitle || `${currentSeasonData.name} 赛季机制`;
+        const paras = String(currentSeasonData.description)
+          .split(/\n{2,}/)
+          .map(t => t.trim())
+          .filter(Boolean)
+          .map(t => `<p>${t}</p>`)
+          .join('');
+        notice.innerHTML = `
+          <div class="notice-head">
+            <span class="notice-title">${title}</span>
+            <span class="notice-arrow">▼</span>
+          </div>
+          <div class="notice-body">${paras}</div>
+        `;
+        notice.querySelector('.notice-head').addEventListener('click', () => {
+          notice.classList.toggle('open');
+        });
+      } else {
+        notice.style.display = 'none';
+        notice.innerHTML = '';
+      }
+
+      grid.innerHTML = '';
+      // 两个分类并列展示（每个分类内一行 3 张卡片）；非两个分类时整行堆叠
+      const sideBySide = groups.length === 2;
+      grid.style.gridTemplateColumns = sideBySide ? 'repeat(2, minmax(0, 1fr))' : '1fr';
+
+      groups.forEach((group) => {
+        const box = document.createElement('div');
+        box.className = 'filter-box';
+        box.style.background = hexToRgba(group.color, 0.08);
+        box.style.borderColor = hexToRgba(group.color, 0.3);
+
+        const boxId = `group-${group.key}-checkboxes`;
+
+        box.innerHTML = `
+          <div class="filter-box-header">
+            <h3 style="color:${group.color}">${group.name}</h3>
+          </div>
+          <div class="checkbox-group ${sideBySide ? 'cols-3' : ''}" id="${boxId}"></div>
+        `;
+
+        grid.appendChild(box);
+
+        const groupSprites = currentSeasonData.sprites.filter(s => getSpriteGroupKey(s) === group.key);
+        const names = [...new Set(groupSprites.map(s => s.name))];
+        renderCheckboxGroup(boxId, names, group);
+      });
+    }
+
+    function renderCheckboxGroup(containerId, names, groupConfig) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      const seasonId = currentSeasonData.season;
+      const accent = groupConfig.color || '#666';
+
+      names.forEach(name => {
+        const sprite = currentSeasonData.sprites.find(s => s.name === name) || {};
+        const attrs = [sprite.attr1, sprite.attr2].filter(Boolean);
+        const attrsHtml = attrs.map(a => `
+          <span class="sprite-attr">
+            <img src="${BASE_PATH}/images/attrs/${encodeURIComponent(a)}.png" alt="${a}">
+            ${a}
+          </span>
+        `).join('');
+
+        // 属性筛选：不可命中当前筛选属性的精灵置灰不可选
+        const canHit = canHitAttr(sprite, selectedAttr);
+
+        const label = document.createElement('label');
+        label.className = 'sprite-card' + (canHit ? '' : ' disabled');
+        label.style.setProperty('--accent', accent);
+        label.style.setProperty('--accent-bg', hexToRgba(accent, 0.08));
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = name;
+        checkbox.checked = selectedSprites.has(name);
+        if (!canHit) checkbox.disabled = true;
+        checkbox.addEventListener('change', (e) => {
+          // 单选：选中新精灵时清空其他选择
+          if (e.target.checked) {
+            selectedSprites.clear();
+            selectedSprites.add(name);
+          } else {
+            selectedSprites.delete(name);
+          }
+          syncSelectionUI();
+          updateResults();
+        });
+
+        // 精灵图片：images/S{赛季}/{精灵名}.png；S4 预览版精灵文件名带「（预览版）」
+        const imgFile = sprite.previewImage ? `${name}（预览版）` : name;
+        const imgSrc = `${BASE_PATH}/images/${seasonId}/${encodeURIComponent(imgFile)}.png`;
+        label.innerHTML = `
+          <span class="sprite-img-wrap">
+            <img class="sprite-img" src="${imgSrc}" alt="${name}" loading="lazy">
+          </span>
+          <span class="sprite-name">${nameBlock(name)}</span>
+          <span class="sprite-attrs">${attrsHtml}</span>
+        `;
+
+        // 占位符控制 + 常规/异色图交替（清单驱动，仅 S1~S3 有异色图）
+        const wrapEl = label.querySelector('.sprite-img-wrap');
+        const imgEl = wrapEl.querySelector('.sprite-img');
+        bindPlaceholder(wrapEl, imgEl);
+        setupSwap(wrapEl, imgEl, imgSrc, name);
+
+        label.appendChild(checkbox);
+        label.classList.toggle('selected', checkbox.checked);
+        container.appendChild(label);
+      });
+    }
+
+    // ==================== 更新结果 ====================
+    function updateResults() {
+      const hasSelection = selectedSprites.size > 0;
+      const emptyState = document.getElementById('empty-state');
+      const recommendSection = document.getElementById('recommend-section');
+      const regionHint = document.getElementById('region-hint');
+      const hitAttrsBar = document.getElementById('recommend-hit-attrs');
+
+      if (!hasSelection) {
+        emptyState.style.display = 'block';
+        recommendSection.style.display = 'none';
+        regionHint.style.display = 'none';
+        hitAttrsBar.innerHTML = '';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+      recommendSection.style.display = 'block';
+
+      // 收集命中属性 + 选中精灵的完整数据
+      const hitAttrs = new Set();
+      const selectedData = [];
+
+      selectedSprites.forEach(name => {
+        const matches = currentSeasonData.sprites.filter(s => s.name === name);
+        matches.forEach(s => {
+          selectedData.push(s);
+          if (s.attr1) hitAttrs.add(s.attr1);
+          if (s.attr2) hitAttrs.add(s.attr2);
+        });
+      });
+
+      // 命中属性：并入推荐属性池区块顶部
+      const attrList = Array.from(hitAttrs).map(attr => {
+        const color = attrColors[attr] || '#666';
+        return `<span class="attr-tag" style="background:${hexToRgba(color, 0.12)};border-color:${color};color:${color};">
+          <img src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.png" alt="${attr}">${attr}
+        </span>`;
+      }).join('');
+      hitAttrsBar.innerHTML = `<span class="label">命中属性：</span>${attrList || '<span style="color:#999;font-size:13px;">无</span>'}`;
+
+      // 地区形态提示（如刺轮砣双形态为相互独立的精灵）
+      renderRegionHint(selectedData);
+
+      // 可定向信息：选中精灵可经「属性池」直接定向的属性 / 可经「赛季机制」近似定向的属性
+      // （并入推荐属性池：在各属性池分组头用 tag 标注，不再单独列区块）
+      const poolAttrs = new Set();
+      const mechAttrs = new Set();
+      let mechTag = null; // 赛季机制分组的标识（如 S4 金月/赤月），嵌在「赛季机制定向」tag 内
+      selectedData.forEach(s => {
+        const d = s.directable;
+        if (!d) return;
+        (d.pool || []).forEach(a => poolAttrs.add(a));
+        if ((d.mechanism || []).length > 0) {
+          (d.mechanism).forEach(a => mechAttrs.add(a));
+          if (!mechTag) {
+            const g = (currentSeasonData.filterGroups || []).find(g => g.key === s.group);
+            if (g) mechTag = { text: g.badgeText || g.name, color: g.badgeColor || g.color };
+          }
+        }
+      });
+
+      const recommend = highValueSprites
+        .filter(s => hitAttrs.has(s.attr))
+        .filter(s => !selectedAttr || s.attr === selectedAttr)
+        .filter(s => !(s.excludeSeasons || []).includes(currentSeasonData.season))
+        .sort((a, b) => b.value - a.value);
+
+      const grouped = {};
+      recommend.forEach(item => {
+        if (!grouped[item.attr]) grouped[item.attr] = [];
+        grouped[item.attr].push(item);
+      });
+
+      renderRecommend(grouped, poolAttrs, mechAttrs, mechTag);
+    }
+
+    // ==================== 渲染地区形态提示 ====================
+    // 拥有 family 字段的精灵（如刺轮砣的上弦/下弦形态）为同一精灵的地区形态，
+    // 属于相互独立的精灵，需特殊方式刷取（具体方式待补充）。选中其一后提示相关形态。
+    function renderRegionHint(selectedData) {
+      const el = document.getElementById('region-hint');
+      const famSprite = selectedData.find(s => s.family);
+      const siblings = famSprite
+        ? currentSeasonData.sprites.filter(s => s.family === famSprite.family && s.name !== famSprite.name)
+        : [];
+
+      if (!famSprite || siblings.length === 0) {
+        el.style.display = 'none';
+        return;
+      }
+
+      const siblingNames = siblings.map(s => s.name).join('、');
+      el.innerHTML = `
+        <span class="region-hint-title">地区形态提示</span>
+        <span>${famSprite.name} 与 ${siblingNames} 为「${famSprite.family}」的地区形态，属于相互独立的精灵，需特殊方式刷取。</span>
+      `;
+      el.style.display = 'flex';
+    }
+
+    // ==================== 渲染推荐列表 ====================
+    function renderRecommend(grouped, poolAttrs, mechAttrs, mechTag) {
+      const container = document.getElementById('recommend-list');
+      container.innerHTML = '';
+
+      const attrs = Object.keys(grouped).sort();
+
+      if (attrs.length === 0) {
+        container.innerHTML = '<div style="color:#999;font-size:13px;text-align:center;padding:12px;">暂无匹配推荐</div>';
+        return;
+      }
+
+      // 可定向（属性池/赛季机制可定向）属性池优先展示，其余平铺并标「不可定向」；不再折叠
+      const directableGroups = [];
+      const nonDirectableGroups = [];
+
+      attrs.forEach(attr => {
+        if (poolAttrs.has(attr) || mechAttrs.has(attr)) {
+          directableGroups.push(attr);
+        } else {
+          nonDirectableGroups.push(attr);
+        }
+      });
+
+      directableGroups.forEach(attr => {
+        renderAttrGroup(container, attr, grouped[attr], {
+          pool: poolAttrs.has(attr),
+          mech: mechAttrs.has(attr)
+        }, mechTag);
+      });
+
+      nonDirectableGroups.forEach(attr => {
+        renderAttrGroup(container, attr, grouped[attr], null, mechTag);
+      });
+    }
+
+    function renderAttrGroup(container, attr, group, direct, mechTag) {
+      const section = document.createElement('div');
+      section.className = 'recommend-group';
+
+      const itemsHtml = group.map(item => {
+        const stages = item.stages || [];
+        const stagePill = stages.length > 0 ? `<span class="rc-stage">${toChinese(stages.length)}阶</span>` : '';
+        return `
+        <span class="recommend-card">
+          <span class="rc-img-wrap"><img class="rc-img" src="${BASE_PATH}/images/high_value/${encodeURIComponent(item.name)}.png" alt="${item.name}" loading="lazy"></span>
+          <span class="rc-name">${nameBlock(item.name)}</span>
+          <span class="rc-attr">
+            <span class="rc-attr-label">第一属性：</span>
+            <img class="rc-attr-ico" src="${BASE_PATH}/images/attrs/${encodeURIComponent(item.attr)}.png" alt="${item.attr}">
+            <span class="rc-attr-name">${item.attr}</span>
+          </span>
+          <span class="rc-foot">
+            <span class="rc-star"><img src="${BASE_PATH}/images/star_value.png" alt="星光值">${item.value}</span>
+            ${stagePill}
+          </span>
+        </span>`;
+      }).join('');
+
+      // 分组头 tag：属性池定向 / 赛季机制定向（可内嵌金月/赤月）/ 不可定向
+      let badges = '';
+      if (direct) {
+        if (direct.pool) badges += '<span class="dir-method pool">属性池定向</span>';
+        if (direct.mech) {
+          const sub = mechTag
+            ? `<span class="m-sub" style="background:${mechTag.color}">${mechTag.text}</span>`
+            : '';
+          badges += `<span class="dir-method mech">赛季机制定向${sub}</span>`;
+        }
+      } else {
+        badges = '<span class="dir-method none">不可定向</span>';
+      }
+
+      section.innerHTML = `
+        <div class="recommend-group-header">
+          <img class="dot" src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.png" alt="${attr}">
+          <span class="attr-name">${attr}</span>
+          <span class="count">(${group.length}只)</span>
+          ${badges}
+        </div>
+        <div class="recommend-items">${itemsHtml}</div>
+      `;
+
+      section.querySelectorAll('.rc-img-wrap').forEach(w => bindPlaceholder(w, w.querySelector('img')));
+
+      container.appendChild(section);
+    }
+
+    // ==================== 工具函数 ====================
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    // 图片占位符：加载成功则隐藏"暂无图片"占位文字，失败则保留
+    function bindPlaceholder(wrap, img) {
+      if (!wrap || !img) return;
+      img.addEventListener('load', () => wrap.classList.add('has-img'));
+      img.addEventListener('error', () => wrap.classList.remove('has-img'));
+    }
+
+    // ==================== 常规/异色图交替（S1~S3，双图交叠平滑过渡） ====================
+    // 异色图清单由 data/yise_images.json 驱动，仅在清单内的精灵启用交替，
+    // 避免对不存在异色图的精灵产生 404 请求噪音；未来赛季更新只需补充清单。
+    // 实现：容器内叠加两层 <img>（常规图/异色图各一层，均已预载），到点后仅切换两层
+    // opacity，由 CSS transition 完成 2.4s 淡入淡出，两图交叠无硬切。
+    const swapItems = [];
+    let yiseImages = {};
+    const SWAP_INTERVAL = 5000; // 每 5 秒切换一次
+    function setupSwap(wrap, img, origSrc, name) {
+      if (!wrap || !img || !origSrc || !name) return;
+      const seasonId = currentSeasonData.season;
+      const list = yiseImages[seasonId] || [];
+      if (!list.includes(name)) return;
+      const altSrc = origSrc.replace(/\.png$/, '_异色.png');
+
+      const alt = document.createElement('img');
+      alt.src = altSrc;
+      alt.alt = img.alt || name;
+      alt.style.opacity = '0';
+      wrap.appendChild(alt);
+      wrap.classList.add('sw-ready');
+      img.style.opacity = '1';
+
+      swapItems.push({ wrap, a: img, b: alt, showA: true });
+    }
+    setInterval(() => {
+      // 清理已从 DOM 移除的旧容器（属性筛选/切换赛季会重建卡片），避免重复累积
+      for (let i = swapItems.length - 1; i >= 0; i--) {
+        if (!swapItems[i].wrap.isConnected) swapItems.splice(i, 1);
+      }
+      swapItems.forEach(item => {
+        const cur = item.showA ? item.a : item.b;
+        const nxt = item.showA ? item.b : item.a;
+        item.showA = !item.showA;
+        cur.style.opacity = '0';
+        nxt.style.opacity = '1';
+      });
+    }, SWAP_INTERVAL);
+
+    // 中文数字（阶段数）
+    function toChinese(n) {
+      const c = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+      return n >= 1 && n <= 10 ? c[n - 1] : String(n);
+    }
+
+    // 卡片名称两行结构：主名一行，括号地区形态另起一行（小字灰色）；
+    // 无括号的也输出空副行，保证所有卡片名称区高度一致
+    function nameBlock(name) {
+      const m = /^(.+?)（(.+)）$/.exec(name);
+      if (m) {
+        return `<span class="nm-main">${m[1]}</span><span class="nm-sub">（${m[2]}）</span>`;
+      }
+      return `<span class="nm-main">${name}</span><span class="nm-sub"></span>`;
+    }
+
+    // ==================== 启动 ====================
+    init();
+  </script>
+</body>
+</html>

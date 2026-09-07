@@ -1,0 +1,125 @@
+{
+  "season": "S3",
+  "name": "铅字幻梦",
+  "description": "",
+  "filterGroups": [
+    {
+      "key": "season",
+      "name": "赛季奇遇",
+      "color": "#e65100"
+    },
+    {
+      "key": "resident",
+      "name": "常驻异色",
+      "color": "#2e7d32"
+    }
+  ],
+  "sprites": [
+    {
+      "name": "蝴蝶陶陶",
+      "attr1": "萌",
+      "group": "season"
+    },
+    {
+      "name": "苞米仔",
+      "attr1": "草",
+      "attr2": "火",
+      "group": "season"
+    },
+    {
+      "name": "十字蝌蚪",
+      "attr1": "水",
+      "group": "season"
+    },
+    {
+      "name": "卡波",
+      "attr1": "恶",
+      "group": "season"
+    },
+    {
+      "name": "守夜烛",
+      "attr1": "火",
+      "attr2": "光",
+      "group": "season"
+    },
+    {
+      "name": "蜜果骸",
+      "attr1": "幽",
+      "attr2": "草",
+      "group": "season"
+    },
+    {
+      "name": "稻草人",
+      "attr1": "萌",
+      "attr2": "武",
+      "group": "season"
+    },
+    {
+      "name": "栗鼠",
+      "attr1": "毒",
+      "attr2": "普通",
+      "group": "season"
+    },
+    {
+      "name": "伊贝儿",
+      "attr1": "草",
+      "group": "resident"
+    },
+    {
+      "name": "海盔虫",
+      "attr1": "水",
+      "attr2": "毒",
+      "group": "resident",
+      "family": "海盔虫"
+    },
+    {
+      "name": "海盔虫（磨损的样子）",
+      "attr1": "水",
+      "attr2": "毒",
+      "group": "resident",
+      "family": "海盔虫",
+      "form": "磨损的样子"
+    },
+    {
+      "name": "小草虫",
+      "attr1": "虫",
+      "attr2": "草",
+      "group": "resident"
+    },
+    {
+      "name": "斑斑",
+      "attr1": "翼",
+      "group": "resident"
+    },
+    {
+      "name": "小鹬",
+      "attr1": "翼",
+      "group": "resident"
+    },
+    {
+      "name": "豆丁鱼",
+      "attr1": "水",
+      "attr2": "龙",
+      "group": "resident"
+    },
+    {
+      "name": "可立鸡",
+      "attr1": "萌",
+      "group": "resident"
+    },
+    {
+      "name": "地鼠（枯水期的样子）",
+      "attr1": "地",
+      "group": "resident",
+      "family": "地鼠",
+      "form": "枯水期的样子"
+    },
+    {
+      "name": "地鼠（储水时的样子）",
+      "attr1": "地",
+      "group": "resident",
+      "family": "地鼠",
+      "form": "储水时的样子"
+    }
+  ]
+}

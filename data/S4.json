@@ -1,0 +1,256 @@
+{
+  "season": "S4",
+  "name": "月涌狂想",
+  "noticeTitle": "赛季奇遇「星陨流光」",
+  "description": "本赛季奇遇精灵将分为「金月奇遇精灵」与「赤月奇遇精灵」两大主题（分类详见“赛季奇遇精灵”）。大多数情况下，某一主题的精灵只会在对应形态的「月陨星」（金月陨星或赤月陨星）中出现。小洛克想定向获取某一主题的异色精灵，将「白月陨星」转为对应形态即可。\n\n举例：连续捕捉虫系精灵出现异色时，转化「金月陨星」大概率出现「瑰眼仔」、「叮叮卯」的异色，小概率出现其他「金月」主题的异色精灵；转化「赤月」形态则大概率出现「未完虫」的异色，小概率出现其他「赤月」主题的异色精灵。\n\n特别说明：通过连续捕捉同进化链的方式获取异色，在保底情况下，无论选择「金月陨星」还是「赤月陨星」必定出现该进化链的异色精灵。非保底时大概率依然出现该异色，小概率歪至所选形态对应的其他异色（选「金月陨星」对应「金月」主题异色，选「赤月陨星」对应「赤月」主题异色）。",
+  "filterGroups": [
+    {
+      "key": "gold",
+      "name": "金月奇遇",
+      "color": "#D4A843",
+      "badgeText": "金月",
+      "badgeColor": "#D4A843"
+    },
+    {
+      "key": "crimson",
+      "name": "赤月奇遇",
+      "color": "#C0392B",
+      "badgeText": "赤月",
+      "badgeColor": "#C0392B"
+    }
+  ],
+  "sprites": [
+    {
+      "name": "小灵菇",
+      "attr1": "幽",
+      "attr2": "",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": [
+          "幽"
+        ]
+      },
+      "group2": "resident"
+    },
+    {
+      "name": "瑰眼仔",
+      "attr1": "恶",
+      "attr2": "虫",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": []
+      },
+      "group2": "resident"
+    },
+    {
+      "name": "星星眼",
+      "attr1": "幻",
+      "attr2": "",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": []
+      },
+      "group2": "season",
+      "previewImage": true
+    },
+    {
+      "name": "芽眼魔",
+      "attr1": "恶",
+      "attr2": "水",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": [
+          "水"
+        ]
+      },
+      "group2": "resident"
+    },
+    {
+      "name": "小黑猫",
+      "attr1": "普通",
+      "attr2": "",
+      "group": "gold",
+      "directable": {
+        "pool": [
+          "普通"
+        ],
+        "mechanism": []
+      },
+      "group2": "resident"
+    },
+    {
+      "name": "玳龟",
+      "attr1": "幻",
+      "attr2": "",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": []
+      },
+      "group2": "season",
+      "previewImage": true
+    },
+    {
+      "name": "叮叮卯",
+      "attr1": "机械",
+      "attr2": "虫",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": [
+          "机械"
+        ]
+      },
+      "group2": "resident"
+    },
+    {
+      "name": "小浣蛋",
+      "attr1": "恶",
+      "attr2": "",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": []
+      },
+      "group2": "season",
+      "previewImage": true
+    },
+    {
+      "name": "布灵",
+      "attr1": "幻",
+      "attr2": "光",
+      "group": "gold",
+      "directable": {
+        "pool": [],
+        "mechanism": [
+          "光"
+        ]
+      },
+      "group2": "season",
+      "previewImage": true
+    },
+    {
+      "name": "觅觅蝠",
+      "attr1": "翼",
+      "attr2": "",
+      "group": "crimson",
+      "directable": {
+        "pool": [],
+        "mechanism": []
+      },
+      "group2": "resident"
+    },
+    {
+      "name": "逗逗",
+      "attr1": "萌",
+      "attr2": "",
+      "group": "crimson",
+      "directable": {
+        "pool": [],
+        "mechanism": []
+      },
+      "group2": "resident"
+    },
+    {
+      "name": "未完虫",
+      "attr1": "幽",
+      "attr2": "虫",
+      "group": "crimson",
+      "directable": {
+        "pool": [],
+        "mechanism": [
+          "虫"
+        ]
+      },
+      "group2": "season",
+      "previewImage": true
+    },
+    {
+      "name": "刺轮砣（上弦的样子）",
+      "attr1": "毒",
+      "attr2": "萌",
+      "group": "crimson",
+      "directable": {
+        "pool": [
+          "毒"
+        ],
+        "mechanism": []
+      },
+      "group2": "resident",
+      "family": "刺轮砣",
+      "form": "上弦的样子"
+    },
+    {
+      "name": "刺轮砣（下弦的样子）",
+      "attr1": "毒",
+      "attr2": "萌",
+      "group": "crimson",
+      "directable": {
+        "pool": [
+          "毒"
+        ],
+        "mechanism": []
+      },
+      "group2": "resident",
+      "family": "刺轮砣",
+      "form": "下弦的样子"
+    },
+    {
+      "name": "量风碗",
+      "attr1": "翼",
+      "attr2": "机械",
+      "group": "crimson",
+      "directable": {
+        "pool": [],
+        "mechanism": [
+          "机械"
+        ]
+      },
+      "group2": "season",
+      "previewImage": true
+    },
+    {
+      "name": "章脑丸",
+      "attr1": "光",
+      "attr2": "水",
+      "group": "crimson",
+      "directable": {
+        "pool": [],
+        "mechanism": [
+          "光",
+          "水"
+        ]
+      },
+      "group2": "season",
+      "previewImage": true
+    },
+    {
+      "name": "幽铃",
+      "attr1": "幽",
+      "attr2": "",
+      "group": "crimson",
+      "directable": {
+        "pool": [],
+        "mechanism": []
+      },
+      "group2": "season",
+      "previewImage": true
+    }
+  ],
+  "categoryGroups": [
+    {
+      "key": "season",
+      "name": "赛季奇遇",
+      "color": "#e65100"
+    },
+    {
+      "key": "resident",
+      "name": "常驻异色",
+      "color": "#2e7d32"
+    }
+  ]
+}

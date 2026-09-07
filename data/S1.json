@@ -1,0 +1,108 @@
+{
+  "season": "S1",
+  "name": "暗夜拾光",
+  "description": "",
+  "filterGroups": [
+    {
+      "key": "season",
+      "name": "赛季奇遇",
+      "color": "#e65100"
+    },
+    {
+      "key": "resident",
+      "name": "常驻异色",
+      "color": "#2e7d32"
+    }
+  ],
+  "sprites": [
+    {
+      "name": "治愈兔",
+      "attr1": "火",
+      "attr2": "萌",
+      "group": "resident"
+    },
+    {
+      "name": "大耳帽兜",
+      "attr1": "冰",
+      "attr2": "萌",
+      "group": "resident"
+    },
+    {
+      "name": "呼呼猪",
+      "attr1": "冰",
+      "attr2": "地",
+      "group": "resident"
+    },
+    {
+      "name": "格兰种子",
+      "attr1": "草",
+      "group": "resident"
+    },
+    {
+      "name": "奇丽草",
+      "attr1": "草",
+      "group": "resident"
+    },
+    {
+      "name": "拉特",
+      "attr1": "电",
+      "group": "resident"
+    },
+    {
+      "name": "恶魔狼",
+      "attr1": "恶",
+      "group": "resident"
+    },
+    {
+      "name": "机械方方",
+      "attr1": "机械",
+      "group": "resident"
+    },
+    {
+      "name": "贝瑟",
+      "attr1": "机械",
+      "attr2": "火",
+      "group": "season"
+    },
+    {
+      "name": "月牙雪熊",
+      "attr1": "冰",
+      "attr2": "幻",
+      "group": "season"
+    },
+    {
+      "name": "粉星仔",
+      "attr1": "电",
+      "attr2": "幻",
+      "group": "season"
+    },
+    {
+      "name": "嗜光嗡嗡",
+      "attr1": "恶",
+      "attr2": "光",
+      "group": "season"
+    },
+    {
+      "name": "双灯鱼",
+      "attr1": "水",
+      "attr2": "电",
+      "group": "season"
+    },
+    {
+      "name": "柴渣虫",
+      "attr1": "火",
+      "attr2": "草",
+      "group": "season"
+    },
+    {
+      "name": "粉粉星",
+      "attr1": "幻",
+      "group": "season"
+    },
+    {
+      "name": "空空颅",
+      "attr1": "幽",
+      "group": "season"
+    }
+  ]
+}

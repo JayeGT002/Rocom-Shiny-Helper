@@ -1,0 +1,106 @@
+{
+  "season": "S2",
+  "name": "狂欢怪谈",
+  "description": "",
+  "filterGroups": [
+    {
+      "key": "season",
+      "name": "赛季奇遇",
+      "color": "#e65100"
+    },
+    {
+      "key": "resident",
+      "name": "常驻异色",
+      "color": "#2e7d32"
+    }
+  ],
+  "sprites": [
+    {
+      "name": "灵狐",
+      "attr1": "火",
+      "attr2": "冰",
+      "group": "resident"
+    },
+    {
+      "name": "幽影树",
+      "attr1": "幽",
+      "attr2": "草",
+      "group": "resident"
+    },
+    {
+      "name": "恶魔叮",
+      "attr1": "恶",
+      "attr2": "翼",
+      "group": "resident"
+    },
+    {
+      "name": "嘟嘟煲",
+      "attr1": "毒",
+      "group": "resident"
+    },
+    {
+      "name": "菊花梨",
+      "attr1": "萌",
+      "group": "resident"
+    },
+    {
+      "name": "公平鸽",
+      "attr1": "普通",
+      "group": "resident"
+    },
+    {
+      "name": "小夜",
+      "attr1": "恶",
+      "group": "resident"
+    },
+    {
+      "name": "小独角兽",
+      "attr1": "光",
+      "group": "resident"
+    },
+    {
+      "name": "烟花团",
+      "attr1": "火",
+      "attr2": "毒",
+      "group": "season"
+    },
+    {
+      "name": "炫光迪迪",
+      "attr1": "电",
+      "attr2": "光",
+      "group": "season"
+    },
+    {
+      "name": "猴麦仔",
+      "attr1": "普通",
+      "attr2": "机械",
+      "group": "season"
+    },
+    {
+      "name": "加油海葵",
+      "attr1": "水",
+      "attr2": "萌",
+      "group": "season"
+    },
+    {
+      "name": "小丑豆豆",
+      "attr1": "恶",
+      "group": "season"
+    },
+    {
+      "name": "小鼓象",
+      "attr1": "机械",
+      "group": "season"
+    },
+    {
+      "name": "牵线木偶",
+      "attr1": "幻",
+      "group": "season"
+    },
+    {
+      "name": "咕咕帽",
+      "attr1": "幽",
+      "group": "season"
+    }
+  ]
+}
