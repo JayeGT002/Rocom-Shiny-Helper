@@ -321,15 +321,13 @@
     // ==================== 更新结果 ====================
     // 赛季出现规则：notBeforeSeason(Sx 含Sx以前不出现) / notAfterSeason(Sx 含Sx以后不出现)
     function seasonAllowed(s, seasonId) {
-      const rank = t => {
-        const m = /S(\d+)/.exec(String(t || ''));
-        return m ? Number(m[1]) : null;
-      };
-      const cur = rank(seasonId);
+      const rankOf = {};
+      seasonsConfig.forEach((c, i) => { rankOf[c.id] = seasonsConfig.length - i; });
+      const cur = rankOf[seasonId];
       if (cur == null) return true;
-      const nb = rank(s.notBeforeSeason);
+      const nb = rankOf[s.notBeforeSeason];
       if (nb != null && cur <= nb) return false;
-      const na = rank(s.notAfterSeason);
+      const na = rankOf[s.notAfterSeason];
       if (na != null && cur >= na) return false;
       return true;
     }
