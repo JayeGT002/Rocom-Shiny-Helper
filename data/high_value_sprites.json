@@ -1,98 +1,19 @@
 {
   "sprites": [
     {
-      "name": "白金独角兽",
-      "attr": "光",
+      "name": "月牙雪熊",
+      "attr": "冰",
       "value": 60,
       "stages": [
-        "小独角兽",
-        "白金独角兽"
-      ]
-    },
-    {
-      "name": "流明坎德拉",
-      "attr": "火",
-      "value": 60,
-      "stages": [
-        "守夜烛",
-        "流明坎德拉"
-      ]
-    },
-    {
-      "name": "星云旅者",
-      "attr": "翼",
-      "value": 80,
-      "stages": [
-        "星云旅者"
+        "月牙雪熊"
       ],
-      "excludeSeasons": [
-        "S1",
-        "S2"
-      ]
-    },
-    {
-      "name": "锤头鹳",
-      "attr": "翼",
-      "value": 60,
-      "stages": [
-        "锤头鹳"
-      ]
-    },
-    {
-      "name": "高脚鹬",
-      "attr": "翼",
-      "value": 60,
-      "stages": [
-        "小鹬",
-        "鄙目鹬",
-        "高脚鹬"
-      ]
-    },
-    {
-      "name": "梦悠悠",
-      "attr": "幽",
-      "value": 60,
-      "stages": [
-        "梦游",
-        "梦悠悠"
-      ]
-    },
-    {
-      "name": "混乱鱿彩",
-      "attr": "幽",
-      "value": 60,
-      "stages": [
-        "墨鱿士",
-        "混乱鱿彩"
-      ]
-    },
-    {
-      "name": "恶魔狼",
-      "attr": "恶",
-      "value": 80,
-      "stages": [
-        "恶魔狼"
-      ]
-    },
-    {
-      "name": "乌拉塔",
-      "attr": "恶",
-      "value": 60,
-      "stages": [
-        "乌达",
-        "迷你乌",
-        "乌拉塔"
-      ]
-    },
-    {
-      "name": "朔夜伊芙",
-      "attr": "恶",
-      "value": 80,
-      "stages": [
-        "小夜",
-        "紫夜",
-        "朔夜伊芙"
-      ]
+      "season": "S1 暗夜拾光",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "S1赛季奇遇作业获取",
+      "attrFull": "冰/幻"
     },
     {
       "name": "粉耳星兔",
@@ -101,7 +22,14 @@
       "stages": [
         "粉星仔",
         "粉耳星兔"
-      ]
+      ],
+      "season": "S1 暗夜拾光",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "S1赛季奇遇作业获取",
+      "attrFull": "幻"
     },
     {
       "name": "帅帅魔偶",
@@ -111,9 +39,74 @@
         "牵线木偶",
         "帅帅魔偶"
       ],
-      "excludeSeasons": [
-        "S1"
-      ]
+      "season": "S2 狂欢怪谈",
+      "notBeforeSeason": "S1",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "S2赛季奇遇作业获取",
+      "attrFull": "幻"
+    },
+    {
+      "name": "流明坎德拉",
+      "attr": "火",
+      "value": 80,
+      "stages": [
+        "守夜烛",
+        "流明坎德拉"
+      ],
+      "season": "S3 铅字幻梦",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "S3赛季奇遇作业获取",
+      "attrFull": "火 / 光"
+    },
+    {
+      "name": "乌拉塔",
+      "attr": "恶",
+      "value": 60,
+      "stages": [
+        "乌达",
+        "迷你乌",
+        "乌拉塔"
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "乌拉塔（极昼的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "乌拉塔（极夜的样子）",
+          "season": "常驻精灵",
+          "attr": "恶",
+          "attrFull": "恶/冰"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "恶/火"
+    },
+    {
+      "name": "伊兰亚龙",
+      "attr": "龙",
+      "value": 60,
+      "stages": [
+        "伊雷龙",
+        "伊兰亚龙"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "龙"
     },
     {
       "name": "公平鸽",
@@ -121,185 +114,14 @@
       "value": 56,
       "stages": [
         "公平鸽"
-      ]
-    },
-    {
-      "name": "裘卡",
-      "attr": "毒",
-      "value": 60,
-      "stages": [
-        "裘洛",
-        "裘力",
-        "裘卡"
-      ]
-    },
-    {
-      "name": "厉毒修萝",
-      "attr": "毒",
-      "value": 60,
-      "stages": [
-        "厉毒小萝",
-        "厉毒修萝"
-      ]
-    },
-    {
-      "name": "菊花梨",
-      "attr": "萌",
-      "value": 56,
-      "stages": [
-        "菊花梨"
-      ]
-    },
-    {
-      "name": "迷迷箱怪",
-      "attr": "机械",
-      "value": 80,
-      "stages": [
-        "小箱怪",
-        "迷迷箱怪"
-      ]
-    },
-    {
-      "name": "波多西",
-      "attr": "机械",
-      "value": 80,
-      "stages": [
-        "多西",
-        "库多西",
-        "波多西"
-      ]
-    },
-    {
-      "name": "彩蝶鲨",
-      "attr": "水",
-      "value": 60,
-      "stages": [
-        "风铃鲨",
-        "蓝蝶鲨",
-        "彩蝶鲨"
-      ]
-    },
-    {
-      "name": "龙鱼",
-      "attr": "水",
-      "value": 60,
-      "stages": [
-        "豆丁鱼",
-        "快鳍鱼",
-        "龙鱼"
-      ]
-    },
-    {
-      "name": "深蓝鲸",
-      "attr": "水",
-      "value": 60,
-      "stages": [
-        "深蓝鲸"
-      ]
-    },
-    {
-      "name": "铠甲虫",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "小甲虫",
-        "铠甲虫"
-      ]
-    },
-    {
-      "name": "化蝶",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "毛毛",
-        "爬爬",
-        "化蝶"
-      ]
-    },
-    {
-      "name": "花衣蝶",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "小草虫",
-        "草衣虫",
-        "花衣蝶"
-      ]
-    },
-    {
-      "name": "恶魔红钻",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "矮脚爬爬",
-        "恶魔红钻"
-      ]
-    },
-    {
-      "name": "芋香巨角蛛",
-      "attr": "虫",
-      "value": 60,
-      "stages": [
-        "圆眼蜘蛛",
-        "尖角蜘蛛",
-        "芋香巨角蛛"
-      ]
-    },
-    {
-      "name": "火焰猿",
-      "attr": "火",
-      "value": 80,
-      "stages": [
-        "可爱猿",
-        "炽热猿",
-        "火焰猿"
-      ]
-    },
-    {
-      "name": "尖嘴狐仙",
-      "attr": "火",
-      "value": 80,
-      "stages": [
-        "灵狐",
-        "九尾狐",
-        "尖嘴狐仙"
-      ]
-    },
-    {
-      "name": "电球咩咩",
-      "attr": "电",
-      "value": 60,
-      "stages": [
-        "电咩咩",
-        "粉咩咩",
-        "电球咩咩"
-      ]
-    },
-    {
-      "name": "星光狮",
-      "attr": "电",
-      "value": 60,
-      "stages": [
-        "小星光",
-        "星光狮"
-      ]
-    },
-    {
-      "name": "酷拉",
-      "attr": "电",
-      "value": 60,
-      "stages": [
-        "拉特",
-        "酷拉"
-      ]
-    },
-    {
-      "name": "噼啪鸟",
-      "attr": "电",
-      "value": 60,
-      "stages": [
-        "噼啪鸟"
-      ]
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4200,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "普通"
     },
     {
       "name": "冰钻布鲁斯",
@@ -309,16 +131,80 @@
         "布鲁斯",
         "雪顶布鲁斯",
         "冰钻布鲁斯"
-      ]
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "冰"
     },
     {
-      "name": "电企鹅",
-      "attr": "冰",
-      "value": 80,
+      "name": "化蝶",
+      "attr": "虫",
+      "value": 60,
       "stages": [
-        "小电企鹅",
-        "电企鹅"
-      ]
+        "毛毛",
+        "爬爬",
+        "化蝶"
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "化蝶（平常的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "化蝶（幽冥眼的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "化蝶（喵喵的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "化蝶（奇丽花的样子）",
+          "season": "常驻精灵"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "虫/萌"
+    },
+    {
+      "name": "厉毒修萝",
+      "attr": "毒",
+      "value": 60,
+      "stages": [
+        "厉毒小萝",
+        "厉毒修萝"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "毒/恶"
+    },
+    {
+      "name": "噼啪鸟",
+      "attr": "电",
+      "value": 60,
+      "stages": [
+        "噼啪鸟"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "电/翼"
     },
     {
       "name": "圣代甜甜",
@@ -328,15 +214,52 @@
         "脆筒甜甜",
         "香草甜甜",
         "圣代甜甜"
-      ]
-    },
-    {
-      "name": "月牙雪熊",
-      "attr": "冰",
-      "value": 60,
-      "stages": [
-        "月牙雪熊"
-      ]
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "圣代甜甜（樱桃巧克力口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（樱桃草莓口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（樱桃抹茶口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（蓝莓巧克力口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（蓝莓草莓口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（蓝莓抹茶口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（杨桃巧克力口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（杨桃草莓口味）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "圣代甜甜（杨桃抹茶口味）",
+          "season": "常驻精灵"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "冰"
     },
     {
       "name": "奇丽花",
@@ -346,17 +269,362 @@
         "奇丽草",
         "奇丽叶",
         "奇丽花"
-      ]
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "草"
     },
     {
-      "name": "蹦蹦花",
-      "attr": "草",
+      "name": "寂灭骨龙",
+      "attr": "龙",
+      "value": 80,
+      "stages": [
+        "大头骨龙",
+        "寂灭骨龙"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "龙/幽"
+    },
+    {
+      "name": "尖嘴狐仙",
+      "attr": "火",
+      "value": 80,
+      "stages": [
+        "灵狐",
+        "九尾狐",
+        "尖嘴狐仙"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "火/电"
+    },
+    {
+      "name": "彩蝶鲨",
+      "attr": "水",
       "value": 60,
       "stages": [
-        "蹦蹦种子",
-        "蹦蹦草",
-        "蹦蹦花"
-      ]
+        "风铃鲨",
+        "蓝蝶鲨",
+        "彩蝶鲨"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "水/翼"
+    },
+    {
+      "name": "怒目怂猫",
+      "attr": "武",
+      "value": 40,
+      "stages": [
+        "小怂猫",
+        "怒目怂猫"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 3000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "武"
+    },
+    {
+      "name": "恶魔狼",
+      "attr": "恶",
+      "value": 80,
+      "stages": [
+        "恶魔狼"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "恶"
+    },
+    {
+      "name": "恶魔红钻",
+      "attr": "虫",
+      "value": 60,
+      "stages": [
+        "矮脚爬爬",
+        "恶魔红钻"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "虫/恶"
+    },
+    {
+      "name": "星云旅者",
+      "attr": "翼",
+      "value": 80,
+      "stages": [
+        "星云旅者"
+      ],
+      "season": "常驻精灵",
+      "extraSeasons": [
+        "S3 铅字幻梦"
+      ],
+      "notBeforeSeason": "S2",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "翼 / 幻"
+    },
+    {
+      "name": "星光狮",
+      "attr": "电",
+      "value": 60,
+      "stages": [
+        "小星光",
+        "星光狮"
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "星光狮（星光能量的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "星光狮（月光能量的样子）",
+          "season": "常驻精灵",
+          "attr": "电",
+          "attrFull": "电/光"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "电"
+    },
+    {
+      "name": "朔夜伊芙",
+      "attr": "恶",
+      "value": 80,
+      "stages": [
+        "小夜",
+        "紫夜",
+        "朔夜伊芙"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "恶"
+    },
+    {
+      "name": "梦悠悠",
+      "attr": "幽",
+      "value": 60,
+      "stages": [
+        "梦游",
+        "梦悠悠"
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "梦悠悠（穿旧睡衣的样子）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "梦悠悠（穿星星睡衣的样子）",
+          "season": "常驻精灵"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "幽"
+    },
+    {
+      "name": "波多西",
+      "attr": "机械",
+      "value": 80,
+      "stages": [
+        "多西",
+        "库多西",
+        "波多西"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "机械/地"
+    },
+    {
+      "name": "泥吼牙",
+      "attr": "地",
+      "value": 60,
+      "stages": [
+        "吸泥鸥",
+        "泥吼牙"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "地/翼"
+    },
+    {
+      "name": "海豹船长",
+      "attr": "武",
+      "value": 40,
+      "stages": [
+        "海豹战士",
+        "海豹船长"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 3000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "武/水"
+    },
+    {
+      "name": "深蓝鲸",
+      "attr": "水",
+      "value": 60,
+      "stages": [
+        "深蓝鲸"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "水"
+    },
+    {
+      "name": "混乱鱿彩",
+      "attr": "幽",
+      "value": 60,
+      "stages": [
+        "墨鱿士",
+        "混乱鱿彩"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "幽/恶"
+    },
+    {
+      "name": "火焰猿",
+      "attr": "火",
+      "value": 80,
+      "stages": [
+        "可爱猿",
+        "炽热猿",
+        "火焰猿"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "火"
+    },
+    {
+      "name": "电企鹅",
+      "attr": "电",
+      "value": 80,
+      "stages": [
+        "小电企鹅",
+        "电企鹅"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "电/电"
+    },
+    {
+      "name": "电球咩咩",
+      "attr": "电",
+      "value": 60,
+      "stages": [
+        "电咩咩",
+        "粉咩咩",
+        "电球咩咩"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "电"
+    },
+    {
+      "name": "白金独角兽",
+      "attr": "光",
+      "value": 60,
+      "stages": [
+        "小独角兽",
+        "白金独角兽"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "光"
+    },
+    {
+      "name": "绒光优优",
+      "attr": "地",
+      "value": 60,
+      "stages": [
+        "优优",
+        "绒光优优"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "地/光"
     },
     {
       "name": "罗隐",
@@ -366,43 +634,14 @@
         "阿米亚特",
         "阿米樱",
         "罗隐"
-      ]
-    },
-    {
-      "name": "泥吼牙",
-      "attr": "地",
-      "value": 60,
-      "stages": [
-        "吸泥鸥",
-        "泥吼牙"
-      ]
-    },
-    {
-      "name": "绒光优优",
-      "attr": "地",
-      "value": 60,
-      "stages": [
-        "优优",
-        "绒光优优"
-      ]
-    },
-    {
-      "name": "寂灭骨龙",
-      "attr": "龙",
-      "value": 80,
-      "stages": [
-        "大头骨龙",
-        "寂灭骨龙"
-      ]
-    },
-    {
-      "name": "伊兰亚龙",
-      "attr": "龙",
-      "value": 60,
-      "stages": [
-        "伊雷龙",
-        "伊兰亚龙"
-      ]
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "地/恶"
     },
     {
       "name": "翼龙",
@@ -411,25 +650,212 @@
       "stages": [
         "小翼龙",
         "翼龙"
-      ]
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "龙/翼"
     },
     {
-      "name": "怒目怂猫",
-      "attr": "武",
-      "value": 40,
+      "name": "芋香巨角蛛",
+      "attr": "虫",
+      "value": 60,
       "stages": [
-        "小怂猫",
-        "怒目怂猫"
-      ]
+        "圆眼蜘蛛",
+        "尖角蜘蛛",
+        "芋香巨角蛛"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "虫/毒"
     },
     {
-      "name": "海豹船长",
-      "attr": "武",
-      "value": 40,
+      "name": "花衣蝶",
+      "attr": "虫",
+      "value": 60,
       "stages": [
-        "海豹战士",
-        "海豹船长"
-      ]
+        "小草虫",
+        "草衣虫",
+        "花衣蝶"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "虫/草"
+    },
+    {
+      "name": "菊花梨",
+      "attr": "萌",
+      "value": 56,
+      "stages": [
+        "菊花梨"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4200,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "萌"
+    },
+    {
+      "name": "裘卡",
+      "attr": "毒",
+      "value": 60,
+      "stages": [
+        "裘洛",
+        "裘力",
+        "裘卡"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "毒"
+    },
+    {
+      "name": "蹦蹦花",
+      "attr": "草",
+      "value": 60,
+      "stages": [
+        "蹦蹦种子",
+        "蹦蹦草",
+        "蹦蹦花"
+      ],
+      "season": "常驻精灵",
+      "forms": [
+        {
+          "name": "蹦蹦花（海神球形态）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "蹦蹦花（彩玉球形态）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "蹦蹦花（短毛球形态）",
+          "season": "常驻精灵"
+        },
+        {
+          "name": "蹦蹦花（象牙球形态）",
+          "season": "常驻精灵"
+        }
+      ],
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "草/毒"
+    },
+    {
+      "name": "迷迷箱怪",
+      "attr": "机械",
+      "value": 80,
+      "stages": [
+        "小箱怪",
+        "迷迷箱怪"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "图鉴数量奖励",
+      "attrFull": "机械/幻"
+    },
+    {
+      "name": "酷拉",
+      "attr": "电",
+      "value": 60,
+      "stages": [
+        "拉特",
+        "酷拉"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "电"
+    },
+    {
+      "name": "铠甲虫",
+      "attr": "虫",
+      "value": 60,
+      "stages": [
+        "小甲虫",
+        "铠甲虫"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "虫"
+    },
+    {
+      "name": "锤头鹳",
+      "attr": "翼",
+      "value": 60,
+      "stages": [
+        "锤头鹳"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "翼/水"
+    },
+    {
+      "name": "高脚鹬",
+      "attr": "翼",
+      "value": 60,
+      "stages": [
+        "小鹬",
+        "鄙目鹬",
+        "高脚鹬"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "翼"
+    },
+    {
+      "name": "龙鱼",
+      "attr": "水",
+      "value": 60,
+      "stages": [
+        "豆丁鱼",
+        "快鳍鱼",
+        "龙鱼"
+      ],
+      "season": "常驻精灵",
+      "notBeforeSeason": "",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "抓20只最高阶课题领取",
+      "attrFull": "水/龙"
     }
   ]
 }

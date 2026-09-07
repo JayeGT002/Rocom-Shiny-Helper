@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../icons.png">
+  <title>混池可用性 - RocoM Shiny Helper</title>
+  <link rel="stylesheet" href="../css/site.css">
+  <style>
+    /* ==================== 混池可用性页（仅本页生效） ==================== */
+    .pa-main { min-width: 0; }
+    .pa-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-bottom: 22px; align-items: stretch; }
+    .pa-card {
+      display: flex; flex-direction: column; gap: 14px;
+      background: #fff; border: 2px solid #e8e8e8; border-radius: 16px;
+      padding: 16px 16px 14px; transition: border-color .15s;
+    }
+    .pa-card.bad { border-color: #eebcba; }
+    .pa-card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .pa-card-title { font-size: 17px; font-weight: 700; color: #1a1a2e; line-height: 1.3; }
+    .pa-pill {
+      flex: none; border-radius: 999px; padding: 3px 12px; line-height: 1.5;
+      font-size: 13px; font-weight: 700; white-space: nowrap;
+    }
+    .pa-pill.ok { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .pa-pill.bad { background: #fdecea; color: #b71c1c; border: 1px solid #ef9a9a; }
+
+    .pa-slots { display: flex; align-items: center; justify-content: center; gap: 14px; }
+    .pa-slot { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 0; }
+    .pa-ava-wrap { position: relative; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; }
+    .pa-ava-wrap::before { content: '暂无图片'; font-size: 13px; color: #b8bcc4; }
+    .pa-ava-wrap.has-img::before { content: none; }
+    .pa-ava { position: relative; width: 100%; height: 100%; object-fit: contain; }
+    .pa-slot-name { font-weight: 700; font-size: 14px; color: #1a1a2e; text-align: center; line-height: 1.25; }
+    .pa-slot-attrs { display: flex; gap: 4px; min-height: 20px; }
+    .pa-slot-attrs img { width: 20px; height: 20px; border-radius: 50%; }
+    .pa-slot-star { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #8a6d3b; white-space: nowrap; }
+    .pa-slot-star img { width: 15px; height: 15px; }
+    .pa-join { font-size: 22px; font-weight: 700; color: #9aa0a6; flex: none; line-height: 1; }
+
+    .pa-state-note {
+      align-self: flex-start; flex: none;
+      background: #fdecea; border: 1px solid #ef9a9a; color: #b71c1c;
+      border-radius: 999px; padding: 3px 12px;
+      font-size: 13px; font-weight: 700; white-space: nowrap;
+    }
+
+    /* 笔记区：与混池卡融合在同一张卡片内 */
+    .pa-note {
+      padding-top: 12px;
+      border-top: 1px dashed #dde1e6;
+    }
+    .pa-note-head { margin-bottom: 4px; }
+    .pa-note-label {
+      font-family: var(--font-game); font-size: 16px; font-weight: 700;
+      color: #a8842a; letter-spacing: .5px;
+    }
+    .pa-note-list { margin: 0; padding: 0 0 0 16px; }
+    .pa-note-list li {
+      font-family: var(--font-text); font-size: 13px; line-height: 1.75;
+      color: #1a1a2e; margin: 0 0 4px;
+    }
+    .pa-note-list li:last-child { margin-bottom: 0; }
+    .pa-note-list a { color: #1565c0; text-decoration: none; }
+
+    @media (max-width: 1100px) {
+      .pa-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <a class="brand" href="../index.html"><img class="brand-ico" src="../icons.png" alt=""><span>RocoM Shiny Helper</span></a>
+      <nav class="top-nav">
+        <a href="../index.html">属性池匹配</a>
+        <a href="high-value.html">高星光值精灵</a>
+        <a class="active" href="pool-availability.html">混池可用性</a>
+        <a href="toolbox.html">实用链接</a>
+        <a href="changelog.html">更新日志</a>
+        <a class="gh" href="https://github.com/JayeGT002/Rocom-Shiny-Helper" target="_blank" rel="noopener" title="GitHub 仓库" aria-label="GitHub 仓库">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+      </nav>
+    </header>
+
+    <main id="pa-app" class="pa-main">
+      <div class="page-head">
+        <div class="page-title">
+          <h1>混池可用性</h1>
+          <p class="page-sub">主流高星光值精灵「刷取混池」的可用状态查询 · 数据新鲜度：2026年9月8日（S4 赛季月涌狂想）</p>
+        </div>
+        <div class="season-select">
+          <label for="pool-season-select">赛季选择</label>
+          <select id="pool-season-select">
+            <option value="">加载中...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="loading" id="pa-loading">正在加载赛季数据...</div>
+
+      <div id="pa-content" style="display: none;">
+        <div class="pa-grid" id="pa-list"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>S4赛季奇遇精灵立绘为预览版本，由能供智人眠神星提供</p>
+      <p>数据资源来自洛克王国世界WIKI，本项目遵循上游共享协议CC BY-NC-SA 4.0（署名-非商业性使用-相同方式共享）</p>
+      <p>本网站是由《洛克王国：世界》游戏爱好者，使用DeepSeek V4 Flash制作。网站所涉及的公司名称、商标、产品等均为其各自所有者的资产，仅供识别。</p>
+      <p>网站内使用的游戏图片、动画、音频、文本原文，仅用于更好地表现游戏资料，其版权归属《洛克王国：世界》项目组所有。</p>
+    </footer>
+  </div>
+
+  <script src="../js/app.js" defer></script>
+  <script>
+    (function () {
+      const $ = id => document.getElementById(id);
+      const select = $('pool-season-select');
+      if (!select) return;
+
+      const loading = $('pa-loading');
+      const content = $('pa-content');
+      const list = $('pa-list');
+
+      // ==================== 基础路径与常量 ====================
+      const base = location.pathname.indexOf('/pages/') >= 0 ? '..' : '.';
+      const attrIcon = a => `${base}/images/attrs/${encodeURIComponent(a)}.png`;
+      const avatarOf = n => `${base}/images/high_value/avatars/${encodeURIComponent(n)}.png`;
+      const starOf = `${base}/images/star_value.png`;
+
+      const ESC = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const splitAttrs = t => String(t || '').replace(/[／/]\s*/g, '/').split('/').map(x => x.trim()).filter(Boolean);
+
+      const parseD = s => { const p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); };
+
+      // 笔记条目的行内链接：[文字](https://...)
+      const LINK_RE = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+
+      // ==================== 状态 ====================
+      // 每个赛季三个混池的可用性由 data/pool_availability.json 手动确认，前端不做自动判定
+      const seasons = [];        // {id,name}
+      const pools = [];          // data/pool_availability.json -> pools
+      const hvMeta = {};         // 精灵名 -> 高星光值数据
+
+      // 解析某混池在某赛季的状态：默认配置 + 命中的时间窗覆盖
+      function poolState(pool, seasonId) {
+        const cfg = (pool.perSeason && pool.perSeason[seasonId]) || {};
+        const windows = cfg.windows || [];
+        const now = Date.now();
+        const active = windows.find(w => now >= parseD(w.start).getTime() && now <= parseD(w.end).getTime());
+        let state = cfg.state || 'unavailable';
+        let note = '';
+        if (active) {
+          state = active.state || 'unavailable';
+          note = active.note || '';
+        }
+        return { available: state === 'available', note };
+      }
+
+      function slotHtml(name) {
+        const meta = hvMeta[name];
+        const attrs = meta ? splitAttrs(meta.attrFull || meta.attr) : [];
+        const value = meta && meta.value;
+        const star = value ? `<span class="pa-slot-star"><img src="${starOf}" alt="">${value}</span>` : '';
+        const attrIcons = attrs.map(a => `<img src="${attrIcon(a)}" alt="${ESC(a)}" title="${ESC(a)}">`).join('');
+        return `
+          <div class="pa-slot">
+            <div class="pa-ava-wrap"><img class="pa-ava" src="${avatarOf(name)}" alt="${ESC(name)}" loading="lazy"
+                 onload="this.parentNode.classList.add('has-img')"
+                 onerror="this.parentNode.classList.remove('has-img');this.style.visibility='hidden'"></div>
+            <span class="pa-slot-name">${ESC(name)}</span>
+            <span class="pa-slot-attrs">${attrIcons}</span>
+            ${star}
+          </div>`;
+      }
+
+      function slotsHtml(pool) {
+        const html = pool.sprites.map(n => slotHtml(n)).join('<span class="pa-join">＋</span>');
+        return `<div class="pa-slots">${html}</div>`;
+      }
+
+      // 笔记区：渲染 data/pool_availability.json 中 pools[].notes，支持 [文字](url) 行内链接
+      function noteBlockHtml(pool) {
+        const notes = (pool.notes || []).filter(n => String(n).trim());
+        if (!notes.length) return '';
+        const lis = notes.map(text => {
+          const html = ESC(text).replace(LINK_RE, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+          return `<li>${html}</li>`;
+        }).join('');
+        return `
+          <div class="pa-note">
+            <div class="pa-note-head"><span class="pa-note-label">笔记</span></div>
+            <ul class="pa-note-list">${lis}</ul>
+          </div>`;
+      }
+
+      function cardHtml(pool, seasonId) {
+        const st = poolState(pool, seasonId);
+        const pill = st.available
+          ? '<span class="pa-pill ok">可用</span>'
+          : '<span class="pa-pill bad">不可用</span>';
+        const stateNote = st.note ? `<div class="pa-state-note">${ESC(st.note)}</div>` : '';
+        return `
+          <section class="pa-card${st.available ? '' : ' bad'}">
+            <header class="pa-card-head">
+              <h3 class="pa-card-title">${ESC(pool.title)}混池</h3>
+              ${pill}
+            </header>
+            ${slotsHtml(pool)}
+            ${stateNote}
+            ${noteBlockHtml(pool)}
+          </section>`;
+      }
+
+      function render() {
+        list.innerHTML = pools.map(p => cardHtml(p, select.value)).join('');
+      }
+
+      // ==================== 启动 ====================
+      async function init() {
+        try {
+          const [seasonsData, hvData, poolData] = await Promise.all([
+            fetch(`${base}/data/seasons.json`).then(r => r.json()),
+            fetch(`${base}/data/high_value_sprites.json`).then(r => r.json()),
+            fetch(`${base}/data/pool_availability.json`).then(r => r.json())
+          ]);
+          seasonsData.seasons.forEach(x => seasons.push({ id: x.id, name: x.name }));
+          (hvData.sprites || []).forEach(s => { hvMeta[s.name] = s; });
+          (poolData.pools || []).forEach(p => pools.push(p));
+
+          select.innerHTML = '';
+          seasons.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = `${s.id} ${s.name}`;
+            select.appendChild(opt);
+          });
+          const cur = seasons.find(s => s.id === 'S4');
+          select.value = cur ? cur.id : (seasons[0] ? seasons[0].id : '');
+
+          loading.style.display = 'none';
+          content.style.display = 'block';
+          render();
+        } catch (e) {
+          loading.textContent = '赛季数据加载失败，请通过本地服务器访问（如：python -m http.server 8080）。';
+        }
+      }
+
+      select.addEventListener('change', render);
+      init();
+    })();
+  </script>
+</body>
+</html>

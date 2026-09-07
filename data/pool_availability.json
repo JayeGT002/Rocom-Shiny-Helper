@@ -1,0 +1,62 @@
+{
+  "pools": [
+    {
+      "id": "dewl",
+      "title": "恶魔狼 + 星云旅者",
+      "sprites": ["恶魔狼", "星云旅者"],
+      "perSeason": {
+        "S1": { "state": "available", "remark": "固定组合混池，永久可用" },
+        "S2": { "state": "available", "remark": "固定组合混池，永久可用" },
+        "S3": { "state": "available", "remark": "固定组合混池，永久可用" },
+        "S4": { "state": "available", "remark": "固定组合混池，永久可用" }
+      },
+      "notes": [
+        "推荐放在S3新增区域的庇护所中。",
+        "放置瓶装快乐可以让星云旅者落地。"
+      ]
+    },
+    {
+      "id": "pipa",
+      "title": "噼啪鸟",
+      "sprites": ["噼啪鸟"],
+      "perSeason": {
+        "S1": { "state": "unavailable", "remark": "当季异色名单含电系精灵（拉特/粉星仔/双灯鱼）" },
+        "S2": { "state": "available", "remark": "电系炫光迪迪属 S2 蛋组池（该机制暂不收录），不导致混池失效" },
+        "S3": { "state": "available", "remark": "当季无异色名单无电系精灵" },
+        "S4": { "state": "available", "remark": "当季异色名单无电系精灵" }
+      },
+      "notes": [
+        "刷取方法见视频：[700小时捕鸟大王保姆级聚集教学 - UP主小洛克希月](https://www.bilibili.com/video/BV1LCgY6EEh7/)",
+        "至少2个号启动。",
+        "房主可以吸仇恨，所以房主需要站到外面当工具人。"
+      ]
+    },
+    {
+      "id": "snow",
+      "title": "月牙雪熊",
+      "sprites": ["月牙雪熊"],
+      "perSeason": {
+        "S1": { "state": "unavailable", "remark": "当季异色名单含冰系精灵（大耳帽兜/呼呼猪/月牙雪熊）" },
+        "S2": { "state": "unavailable", "remark": "当季异色名单含冰系精灵（灵狐）" },
+        "S3": { "state": "available", "remark": "当季异色名单无冰系精灵" },
+        "S4": {
+          "state": "available",
+          "remark": "S4 中期至赛季结束返场 S1 赛季奇遇精灵期间转不可用（由 windows 驱动）",
+          "windows": [
+            {
+              "start": "2026-10-01",
+              "end": "2026-11-08",
+              "state": "unavailable",
+              "note": "S1赛季异色返场中"
+            }
+          ]
+        }
+      },
+      "notes": [
+        "推荐放在S3新增区域的庇护所中。",
+        "放置拼装恐惧可以让月牙雪熊抱团。",
+        "需要注意，如果要多开号放多个月牙雪熊果实，所有号的月牙雪熊需要放在同一个位置，否则月牙雪熊可能不会聚集在一个位置上。"
+      ]
+    }
+  ]
+}

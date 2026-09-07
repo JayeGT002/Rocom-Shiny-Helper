@@ -2,19 +2,23 @@
   "seasons": [
     {
       "id": "S4",
-      "name": "月涌狂想"
+      "name": "月涌狂想",
+      "themeColor": "#B2BFD3"
     },
     {
       "id": "S3",
-      "name": "铅字幻梦"
+      "name": "铅字幻梦",
+      "themeColor": "#c3d951"
     },
     {
       "id": "S2",
-      "name": "狂欢怪谈"
+      "name": "狂欢怪谈",
+      "themeColor": "#a91a19"
     },
     {
       "id": "S1",
-      "name": "暗夜拾光"
+      "name": "暗夜拾光",
+      "themeColor": "#2f2750"
     }
   ]
 }
