@@ -716,6 +716,16 @@ a, a:link, a:visited, a:hover, a:active, a:focus { text-decoration: none; }
   font-size: 12px; color: #9aa0a8; font-family: var(--font-text);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+.lnk-tags { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-top: 2px; }
+.lnk-tag {
+  padding: 1px 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; line-height: 1.6; white-space: nowrap;
+  font-family: var(--font-text);
+}
+.lnk-tag.t-egg { background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; }
+.lnk-tag.t-general { background: #eaf3ff; color: #0b6bcb; border: 1px solid #cfe2fb; }
+.lnk-tag.t-pvp { background: #fdecea; color: #b71c1c; border: 1px solid #ef9a9a; }
+.lnk-tag.t-wiki { background: #ede7f6; color: #4527a0; border: 1px solid #d1c4e9; }
 @media (max-width: 560px) {
   .lnk-card { padding: 8px 10px; gap: 10px; }
   .lnk-tile { width: 44px; height: 44px; }

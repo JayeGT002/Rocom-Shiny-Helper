@@ -6,11 +6,6 @@
   <link rel="icon" type="image/png" href="../icons.png">
   <title>实用链接 - RocoM Shiny Helper</title>
   <link rel="stylesheet" href="../css/site.css">
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => { navigator.serviceWorker.register('../sw.js').catch(() => {}); });
-    }
-  </script>
 </head>
 <body>
   <div class="container">
@@ -33,7 +28,7 @@
       <p class="desc">官方网站、社区与工具导航，点击卡片在新窗口打开。</p>
 
       <section class="lnk-section">
-        <h3 class="lnk-title">官方网站/消息渠道</h3>
+        <h3 class="lnk-title">官方网站</h3>
         <div class="lnk-grid">
           <a class="lnk-card" href="https://rocom.qq.com/" target="_blank" rel="noopener">
             <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-official.webp" alt="" loading="lazy"></span>
@@ -42,6 +37,12 @@
               <span class="lnk-host">rocom.qq.com</span>
             </span>
           </a>
+        </div>
+      </section>
+
+      <section class="lnk-section">
+        <h3 class="lnk-title">官方社交媒体</h3>
+        <div class="lnk-grid">
           <a class="lnk-card" href="https://space.bilibili.com/626796832" target="_blank" rel="noopener">
             <span class="lnk-tile"><img class="lnk-ico" src="../images/links/bilibili.ico" alt="" loading="lazy"></span>
             <span class="lnk-text">
@@ -91,6 +92,12 @@
               <span class="lnk-host">v.kuaishou.com</span>
             </span>
           </a>
+        </div>
+      </section>
+
+      <section class="lnk-section">
+        <h3 class="lnk-title">下载渠道</h3>
+        <div class="lnk-grid">
           <a class="lnk-card" href="https://l.taptap.cn/MXzcvl0R?channel=rep-rep_fxjy6xxzefg" target="_blank" rel="noopener">
             <span class="lnk-tile"><img class="lnk-ico" src="../images/links/taptap.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
@@ -116,15 +123,8 @@
       </section>
 
       <section class="lnk-section">
-        <h3 class="lnk-title">实用网站</h3>
+        <h3 class="lnk-title">实用工具</h3>
         <div class="lnk-grid">
-          <a class="lnk-card" href="https://wiki.biligame.com/rocom/%E9%A6%96%E9%A1%B5" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-wiki.ico" alt="" loading="lazy"></span>
-            <span class="lnk-text">
-              <span class="lnk-name">洛克王国世界wiki</span>
-              <span class="lnk-host">wiki.biligame.com</span>
-            </span>
-          </a>
           <a class="lnk-card" href="https://rocom.qq.com/act/a20250719icreate/" target="_blank" rel="noopener">
             <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-creator.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
@@ -132,17 +132,44 @@
               <span class="lnk-host">rocom.qq.com</span>
             </span>
           </a>
-        </div>
-      </section>
-
-      <section class="lnk-section">
-        <h3 class="lnk-title">实用工具站</h3>
-        <div class="lnk-grid">
+          <a class="lnk-card" href="https://wiki.biligame.com/rocom/%E9%A6%96%E9%A1%B5" target="_blank" rel="noopener">
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-wiki.ico" alt="" loading="lazy"></span>
+            <span class="lnk-text">
+              <span class="lnk-name">洛克王国世界wiki</span>
+              <span class="lnk-host">wiki.biligame.com</span>
+              <span class="lnk-tags"><span class="lnk-tag t-wiki">wiki</span></span>
+            </span>
+          </a>
+          <a class="lnk-card" href="https://km9lavam.html2.link" target="_blank" rel="noopener">
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/pet-filter.svg" alt="" loading="lazy"></span>
+            <span class="lnk-text">
+              <span class="lnk-name">洛克宠物分类筛选工具</span>
+              <span class="lnk-host">km9lavam.html2.link</span>
+              <span class="lnk-tags"><span class="lnk-tag t-egg">孵蛋</span></span>
+            </span>
+          </a>
+          <a class="lnk-card" href="https://rocom.shallow.ink" target="_blank" rel="noopener">
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/spellbook.png" alt="" loading="lazy"></span>
+            <span class="lnk-text">
+              <span class="lnk-name">洛克魔法书</span>
+              <span class="lnk-host">rocom.shallow.ink</span>
+              <span class="lnk-tags"><span class="lnk-tag t-general">综合工具</span></span>
+            </span>
+          </a>
+          <a class="lnk-card" href="https://roco.mega-ug.uk/team" target="_blank" rel="noopener">
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/battle-sim.svg" alt="" loading="lazy"></span>
+            <span class="lnk-text">
+              <span class="lnk-name">洛克王国战斗模拟器</span>
+              <span class="lnk-host">roco.mega-ug.uk</span>
+              <span class="lnk-tags"><span class="lnk-tag t-pvp">PVP</span></span>
+            </span>
+          </a>
           <a class="lnk-card" href="https://roco.gptvip.chat" target="_blank" rel="noopener">
             <span class="lnk-tile"><img class="lnk-ico" src="../images/links/roco-tool.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">洛克工具箱</span>
               <span class="lnk-host">roco.gptvip.chat</span>
+              <span class="lnk-tags"><span class="lnk-tag t-general">综合工具</span></span>
             </span>
           </a>
           <a class="lnk-card" href="https://rococalc.top" target="_blank" rel="noopener">
@@ -150,6 +177,7 @@
             <span class="lnk-text">
               <span class="lnk-name">洛手伤害计算器</span>
               <span class="lnk-host">rococalc.top</span>
+              <span class="lnk-tags"><span class="lnk-tag t-pvp">PVP</span></span>
             </span>
           </a>
         </div>
