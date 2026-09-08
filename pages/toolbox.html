@@ -6,6 +6,11 @@
   <link rel="icon" type="image/png" href="../icons.png">
   <title>实用链接 - RocoM Shiny Helper</title>
   <link rel="stylesheet" href="../css/site.css">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('../sw.js').catch(() => {}); });
+    }
+  </script>
 </head>
 <body>
   <div class="container">
@@ -31,7 +36,7 @@
         <h3 class="lnk-title">官方网站/消息渠道</h3>
         <div class="lnk-grid">
           <a class="lnk-card" href="https://rocom.qq.com/" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-official.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-official.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">洛克王国世界官网</span>
               <span class="lnk-host">rocom.qq.com</span>
@@ -45,7 +50,7 @@
             </span>
           </a>
           <a class="lnk-card" href="https://www.xiaohongshu.com/user/profile/666592c70000000007007ba0" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/xiaohongshu.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/xiaohongshu.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">小红书</span>
               <span class="lnk-host">xiaohongshu.com</span>
@@ -59,7 +64,7 @@
             </span>
           </a>
           <a class="lnk-card" href="http://weixin.qq.com/r/Jh3s9F3EggD9rRmX90g0" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/wechat.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/wechat.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">微信公众号</span>
               <span class="lnk-host">weixin.qq.com</span>
@@ -87,21 +92,21 @@
             </span>
           </a>
           <a class="lnk-card" href="https://l.taptap.cn/MXzcvl0R?channel=rep-rep_fxjy6xxzefg" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/taptap.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/taptap.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">TapTap</span>
               <span class="lnk-host">l.taptap.cn</span>
             </span>
           </a>
           <a class="lnk-card" href="https://www.3839.com/a/105882.htm" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/3839.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/3839.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">好游快爆</span>
               <span class="lnk-host">3839.com</span>
             </span>
           </a>
           <a class="lnk-card" href="https://a.4399.cn/game-id-129392.html?req_source=f" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/4399.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/4399.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">4399游戏盒</span>
               <span class="lnk-host">a.4399.cn</span>
@@ -121,7 +126,7 @@
             </span>
           </a>
           <a class="lnk-card" href="https://rocom.qq.com/act/a20250719icreate/" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-creator.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/rocom-creator.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">洛克王国世界创作者社区</span>
               <span class="lnk-host">rocom.qq.com</span>
@@ -134,14 +139,14 @@
         <h3 class="lnk-title">实用工具站</h3>
         <div class="lnk-grid">
           <a class="lnk-card" href="https://roco.gptvip.chat" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/roco-tool.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/roco-tool.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">洛克工具箱</span>
               <span class="lnk-host">roco.gptvip.chat</span>
             </span>
           </a>
           <a class="lnk-card" href="https://rococalc.top" target="_blank" rel="noopener">
-            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/damage-calc.png" alt="" loading="lazy"></span>
+            <span class="lnk-tile"><img class="lnk-ico" src="../images/links/damage-calc.webp" alt="" loading="lazy"></span>
             <span class="lnk-text">
               <span class="lnk-name">洛手伤害计算器</span>
               <span class="lnk-host">rococalc.top</span>

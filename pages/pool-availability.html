@@ -6,6 +6,11 @@
   <link rel="icon" type="image/png" href="../icons.png">
   <title>混池可用性 - RocoM Shiny Helper</title>
   <link rel="stylesheet" href="../css/site.css">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('../sw.js').catch(() => {}); });
+    }
+  </script>
   <style>
     /* ==================== 混池可用性页（仅本页生效） ==================== */
     .pa-main { min-width: 0; }
@@ -126,9 +131,9 @@
 
       // ==================== 基础路径与常量 ====================
       const base = location.pathname.indexOf('/pages/') >= 0 ? '..' : '.';
-      const attrIcon = a => `${base}/images/attrs/${encodeURIComponent(a)}.png`;
-      const avatarOf = n => `${base}/images/high_value/avatars/${encodeURIComponent(n)}.png`;
-      const starOf = `${base}/images/star_value.png`;
+      const attrIcon = a => `${base}/images/attrs/${encodeURIComponent(a)}.webp`;
+      const avatarOf = n => `${base}/images/high_value/avatars/${encodeURIComponent(n)}.webp`;
+      const starOf = `${base}/images/star_value.webp`;
 
       const ESC = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
       const splitAttrs = t => String(t || '').replace(/[／/]\s*/g, '/').split('/').map(x => x.trim()).filter(Boolean);
@@ -163,11 +168,11 @@
         const meta = hvMeta[name];
         const attrs = meta ? splitAttrs(meta.attrFull || meta.attr) : [];
         const value = meta && meta.value;
-        const star = value ? `<span class="pa-slot-star"><img src="${starOf}" alt="">${value}</span>` : '';
-        const attrIcons = attrs.map(a => `<img src="${attrIcon(a)}" alt="${ESC(a)}" title="${ESC(a)}">`).join('');
+        const star = value ? `<span class="pa-slot-star"><img src="${starOf}" alt="" loading="lazy" width="15" height="15">${value}</span>` : '';
+        const attrIcons = attrs.map(a => `<img src="${attrIcon(a)}" alt="${ESC(a)}" title="${ESC(a)}" loading="lazy" width="20" height="20">`).join('');
         return `
           <div class="pa-slot">
-            <div class="pa-ava-wrap"><img class="pa-ava" src="${avatarOf(name)}" alt="${ESC(name)}" loading="lazy"
+            <div class="pa-ava-wrap"><img class="pa-ava" src="${avatarOf(name)}" alt="${ESC(name)}" loading="lazy" width="256" height="256"
                  onload="this.parentNode.classList.add('has-img')"
                  onerror="this.parentNode.classList.remove('has-img');this.style.visibility='hidden'"></div>
             <span class="pa-slot-name">${ESC(name)}</span>

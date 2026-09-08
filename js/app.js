@@ -156,7 +156,7 @@
           const color = attrColors[attr] || '#666';
           btn.style.setProperty('--ac', color);
           btn.style.setProperty('--abg', hexToRgba(color, 0.12));
-          btn.innerHTML = `<img src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.png" alt="${attr}">${label}`;
+          btn.innerHTML = `<img src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.webp" alt="${attr}" loading="lazy" width="198" height="198">${label}`;
         } else {
           btn.textContent = label;
         }
@@ -265,7 +265,7 @@
         const attrs = [sprite.attr1, sprite.attr2].filter(Boolean);
         const attrsHtml = attrs.map(a => `
           <span class="sprite-attr">
-            <img src="${BASE_PATH}/images/attrs/${encodeURIComponent(a)}.png" alt="${a}">
+            <img src="${BASE_PATH}/images/attrs/${encodeURIComponent(a)}.webp" alt="${a}" loading="lazy" width="198" height="198">
             ${a}
           </span>
         `).join('');
@@ -295,12 +295,12 @@
           updateResults();
         });
 
-        // 精灵图片：images/S{赛季}/{精灵名}.png；S4 预览版精灵文件名带「（预览版）」
+        // 精灵图片：images/S{赛季}/{精灵名}.webp；S4 预览版精灵文件名带「（预览版）」
         const imgFile = sprite.previewImage ? `${name}（预览版）` : name;
-        const imgSrc = `${BASE_PATH}/images/${seasonId}/${encodeURIComponent(imgFile)}.png`;
+        const imgSrc = `${BASE_PATH}/images/${seasonId}/${encodeURIComponent(imgFile)}.webp`;
         label.innerHTML = `
           <span class="sprite-img-wrap">
-            <img class="sprite-img" src="${imgSrc}" alt="${name}" loading="lazy">
+            <img class="sprite-img" src="${imgSrc}" alt="${name}" loading="lazy" width="512" height="512">
           </span>
           <span class="sprite-name">${nameBlock(name)}</span>
           <span class="sprite-attrs">${attrsHtml}</span>
@@ -366,7 +366,7 @@
       const attrList = Array.from(hitAttrs).map(attr => {
         const color = attrColors[attr] || '#666';
         return `<span class="attr-tag" style="background:${hexToRgba(color, 0.12)};border-color:${color};color:${color};">
-          <img src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.png" alt="${attr}">${attr}
+          <img src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.webp" alt="${attr}" loading="lazy" width="198" height="198">${attr}
         </span>`;
       }).join('');
       hitAttrsBar.innerHTML = `<span class="label">命中属性：</span>${attrList || '<span style="color:#999;font-size:13px;">无</span>'}`;
@@ -475,16 +475,16 @@
         const stagePill = stages.length > 0 ? `<span class="rc-stage">${toChinese(stages.length)}阶</span>` : '';
         return `
         <span class="recommend-card">
-          <span class="rc-img-wrap"><img class="rc-img" src="${BASE_PATH}/images/high_value/${encodeURIComponent(item.name)}.png" alt="${item.name}" loading="lazy"></span>
+          <span class="rc-img-wrap"><img class="rc-img" src="${BASE_PATH}/images/high_value/${encodeURIComponent(item.name)}.webp" alt="${item.name}" loading="lazy" width="512" height="512"></span>
           <span class="rc-name">${nameBlock(item.name)}</span>
           <span class="rc-attr">
             <span class="rc-attr-label">第一属性：</span>
-            <img class="rc-attr-ico" src="${BASE_PATH}/images/attrs/${encodeURIComponent(item.attr)}.png" alt="${item.attr}">
+            <img class="rc-attr-ico" src="${BASE_PATH}/images/attrs/${encodeURIComponent(item.attr)}.webp" alt="${item.attr}" loading="lazy" width="198" height="198">
             <span class="rc-attr-name">${item.attr}</span>
           </span>
           <span class="rc-foot">
-            <span class="rc-star"><img src="${BASE_PATH}/images/star_value.png" alt="星光值">${item.value}</span>
-            <span class="rc-coin"><img src="${BASE_PATH}/images/coin_value.png" alt="洛克贝">${item.coin}</span>
+            <span class="rc-star"><img src="${BASE_PATH}/images/star_value.webp" alt="星光值" loading="lazy" width="48" height="48">${item.value}</span>
+            <span class="rc-coin"><img src="${BASE_PATH}/images/coin_value.webp" alt="洛克贝" loading="lazy" width="48" height="48">${item.coin}</span>
             ${stagePill}
           </span>
         </span>`;
@@ -506,7 +506,7 @@
 
       section.innerHTML = `
         <div class="recommend-group-header">
-          <img class="dot" src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.png" alt="${attr}">
+          <img class="dot" src="${BASE_PATH}/images/attrs/${encodeURIComponent(attr)}.webp" alt="${attr}" loading="lazy" width="198" height="198">
           <span class="attr-name">${attr}</span>
           <span class="count">(${group.length}只)</span>
           ${badges}
@@ -547,15 +547,28 @@
       const seasonId = currentSeasonData.season;
       const list = yiseImages[seasonId] || [];
       if (!list.includes(name)) return;
-      const altSrc = origSrc.replace(/\.png$/, '_异色.png');
+      const altSrc = origSrc.replace(/\.webp$/, '_异色.webp');
 
       const alt = document.createElement('img');
-      alt.src = altSrc;
       alt.alt = img.alt || name;
+      alt.width = 512;
+      alt.height = 512;
       alt.style.opacity = '0';
       wrap.appendChild(alt);
       wrap.classList.add('sw-ready');
       img.style.opacity = '1';
+
+      // 异色图懒加载：卡片进入视口附近（300px 提前量）才发起请求，滚动区外不消耗流量
+      let altRequested = false;
+      const io = new IntersectionObserver(entries => {
+        if (altRequested) { io.disconnect(); return; }
+        if (entries.some(e => e.isIntersecting)) {
+          altRequested = true;
+          alt.src = altSrc;
+          io.disconnect();
+        }
+      }, { rootMargin: '300px' });
+      io.observe(wrap);
 
       swapItems.push({ wrap, a: img, b: alt, showA: true });
     }
@@ -612,11 +625,11 @@
     const valueBtnWrap = document.getElementById('hv-value-buttons');
     const cn = ['一','二','三','四','五','六','七','八','九','十'];
     const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-    const attrIcon = a => `${base}/images/attrs/${encodeURIComponent(a)}.png`;
-    const imgOf = n => `${base}/images/high_value/${encodeURIComponent(n)}.png`;
-    const avatarOf = n => `${base}/images/high_value/avatars/${encodeURIComponent(n)}.png`;
-    const starOf = () => `${base}/images/star_value.png`;
-    const coinOf = () => `${base}/images/coin_value.png`;
+    const attrIcon = a => `${base}/images/attrs/${encodeURIComponent(a)}.webp`;
+    const imgOf = n => `${base}/images/high_value/${encodeURIComponent(n)}.webp`;
+    const avatarOf = n => `${base}/images/high_value/avatars/${encodeURIComponent(n)}.webp`;
+    const starOf = () => `${base}/images/star_value.webp`;
+    const coinOf = () => `${base}/images/coin_value.webp`;
     const normAttr = t => String(t || '').replace(/[／/]\s*/g, '/').replace(/\s+/g, '');
     const splitAttrs = t => String(t || '').split('/').map(x => x.trim()).filter(Boolean);
     const sortAttrs = arr => Array.from(new Set(arr)).sort((a,b) => { const i=ORDER.indexOf(a), j=ORDER.indexOf(b); return (i<0?99:i)-(j<0?99:j); });
@@ -627,7 +640,7 @@
     };
     function attrTag(a) {
       const color = attrColors[a] || '#666';
-      return `<span class="hv-tag" style="--ac:${color};background:${hexToRgba(color,0.1)};border-color:${color};color:${color}"><img src="${attrIcon(a)}" alt="" loading="lazy">${esc(a)}</span>`;
+      return `<span class="hv-tag" style="--ac:${color};background:${hexToRgba(color,0.1)};border-color:${color};color:${color}"><img src="${attrIcon(a)}" alt="" loading="lazy" width="198" height="198">${esc(a)}</span>`;
     }
     const attrCell = s => `<span class="hv-tags">${splitAttrs(normAttr(s.attrFull) || s.attr).map(attrTag).join('')}</span>`;
     const firstAttrCell = s => `<span class="hv-tags">${splitAttrs(s.attr).map(attrTag).join('')}</span>`;
@@ -748,7 +761,7 @@
       const seasons = seasonTagsHtml(s, s.season);
       return `
         <span class="recommend-card hv-card">
-          <span class="rc-img-wrap"><img class="rc-img" src="${imgOf(s.name)}" alt="${esc(s.name)}" loading="lazy"></span>
+          <span class="rc-img-wrap"><img class="rc-img" src="${imgOf(s.name)}" alt="${esc(s.name)}" loading="lazy" width="512" height="512"></span>
           <span class="rc-name">${esc(s.name)}</span>
           <span class="rc-attr"><span class="rc-attr-label">第一属性：</span><img class="rc-attr-ico" src="${attrIcon(s.attr)}" alt=""><span class="rc-attr-name">${esc(s.attr)}</span></span>
           <span class="rc-foot">
@@ -797,7 +810,7 @@
     function formRow(s, f) {
       return `
         <tr class="hv-form-row" hidden>
-          <td class="hv-name"><span class="hv-name-in"><span class="hv-slot" aria-hidden="true"></span><img class="hv-ava hv-form-ava" src="${avatarOf(f.name)}" alt="" loading="lazy"><span class="hv-name-text">${esc(f.name)}</span></span></td>${dataCells(s, f.season || s.season, f)}
+          <td class="hv-name"><span class="hv-name-in"><span class="hv-slot" aria-hidden="true"></span><img class="hv-ava hv-form-ava" src="${avatarOf(f.name)}" alt="" loading="lazy" width="256" height="256"><span class="hv-name-text">${esc(f.name)}</span></span></td>${dataCells(s, f.season || s.season, f)}
         </tr>`;
     }
 
@@ -812,7 +825,7 @@
         : `<span class="hv-slot" aria-hidden="true"></span>`;
       return `
         <tr>
-          <td class="hv-name"><span class="hv-name-in">${slot}<img class="hv-ava" src="${avatarOf(s.name)}" alt="" loading="lazy"><span class="hv-name-text">${esc(s.name)}</span></span></td>${dataCells(s, s.season)}
+          <td class="hv-name"><span class="hv-name-in">${slot}<img class="hv-ava" src="${avatarOf(s.name)}" alt="" loading="lazy" width="256" height="256"><span class="hv-name-text">${esc(s.name)}</span></span></td>${dataCells(s, s.season)}
         </tr>${formsRows(s)}`;
     }
 
