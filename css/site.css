@@ -735,3 +735,23 @@ a, a:link, a:visited, a:hover, a:active, a:focus { text-decoration: none; }
   .lnk-tile { width: 44px; height: 44px; }
   .lnk-ico { width: 26px; height: 26px; }
 }
+
+/* ==================== 移动端顶栏导航：单行横向滑动 ==================== */
+/* 手机端品牌独占一行，右侧导航保持单行不换行；超出部分左右滑动查看 */
+@media (max-width: 768px) {
+  .top-nav {
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
+    gap: 18px;
+    padding: 2px 10px 2px 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* 旧 Edge / IE */
+  }
+  .top-nav::-webkit-scrollbar { display: none; }   /* Chrome / Safari */
+  .top-nav a { display: inline-flex; align-items: center; min-height: 44px; }
+}
