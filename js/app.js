@@ -295,7 +295,7 @@
           updateResults();
         });
 
-        // 精灵图片：images/S{赛季}/{精灵名}.webp；S4 预览版精灵文件名带「（预览版）」
+        // 精灵图片：images/S{赛季}/{精灵名}.webp（previewImage 仅用于兼容历史「（预览版）」命名）
         const imgFile = sprite.previewImage ? `${name}（预览版）` : name;
         const imgSrc = `${BASE_PATH}/images/${seasonId}/${encodeURIComponent(imgFile)}.webp`;
         label.innerHTML = `

@@ -53,8 +53,7 @@
         "pool": [],
         "mechanism": []
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     },
     {
       "name": "芽眼魔",
@@ -91,8 +90,7 @@
         "pool": [],
         "mechanism": []
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     },
     {
       "name": "叮叮卯",
@@ -116,8 +114,7 @@
         "pool": [],
         "mechanism": []
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     },
     {
       "name": "布灵",
@@ -130,8 +127,7 @@
           "光"
         ]
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     },
     {
       "name": "觅觅蝠",
@@ -166,8 +162,7 @@
           "虫"
         ]
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     },
     {
       "name": "刺轮砣（上弦的样子）",
@@ -210,8 +205,7 @@
           "机械"
         ]
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     },
     {
       "name": "章脑丸",
@@ -225,8 +219,7 @@
           "水"
         ]
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     },
     {
       "name": "幽铃",
@@ -237,8 +230,7 @@
         "pool": [],
         "mechanism": []
       },
-      "group2": "season",
-      "previewImage": true
+      "group2": "season"
     }
   ],
   "categoryGroups": [

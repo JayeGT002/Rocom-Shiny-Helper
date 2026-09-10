@@ -6,7 +6,7 @@
  *    缓存未过期前不再请求网络，过期后重新拉取并更新缓存
  *  - 发布新内容（尤其 data/*.json 数据更新）后，把 CACHE_VERSION +1
  * ============================================================ */
-const CACHE_VERSION = 'rocom-shiny-v3';
+const CACHE_VERSION = 'rocom-shiny-v4';
 const SHELL_CACHE = CACHE_VERSION + '-shell';
 const ASSET_CACHE = CACHE_VERSION + '-assets';
 
