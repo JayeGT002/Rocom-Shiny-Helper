@@ -473,10 +473,15 @@
       const itemsHtml = group.map(item => {
         const stages = item.stages || [];
         const stagePill = stages.length > 0 ? `<span class="rc-stage">${toChinese(stages.length)}阶</span>` : '';
+        const imgWrap = item.noImage
+          ? `<span class="rc-img-wrap" aria-hidden="true"></span>`
+          : `<span class="rc-img-wrap"><img class="rc-img" src="${BASE_PATH}/images/high_value/${encodeURIComponent(item.name)}.webp" alt="${item.name}" loading="lazy" width="512" height="512"></span>`;
+        const note = item.note ? `<span class="rc-note">（${item.note}）</span>` : '';
         return `
         <span class="recommend-card">
-          <span class="rc-img-wrap"><img class="rc-img" src="${BASE_PATH}/images/high_value/${encodeURIComponent(item.name)}.webp" alt="${item.name}" loading="lazy" width="512" height="512"></span>
+          ${imgWrap}
           <span class="rc-name">${nameBlock(item.name)}</span>
+          ${note}
           <span class="rc-attr">
             <span class="rc-attr-label">第一属性：</span>
             <img class="rc-attr-ico" src="${BASE_PATH}/images/attrs/${encodeURIComponent(item.attr)}.webp" alt="${item.attr}" loading="lazy" width="198" height="198">
@@ -676,6 +681,11 @@
       return n ? `<span class="hv-stage">${cn[n-1]}阶</span>` : '<span class="hv-dim">—</span>';
     };
     const numCell = (icon, val) => `<span class="hv-num"><img src="${icon()}" alt="">${esc(val)}</span>`;
+    // 无立绘精灵：仅留空占位，不写入图片链接（避免 404）
+    const avaCell = (name, noImage) => noImage
+      ? `<span class="hv-ava hv-ava-empty" aria-hidden="true"></span>`
+      : `<img class="hv-ava" src="${avatarOf(name)}" alt="" loading="lazy" width="256" height="256">`;
+    const noteText = note => note ? `<span class="hv-note">（${esc(note)}）</span>` : '';
 
     // ==================== 属性按钮筛选（仅第一属性，风格同属性池匹配页） ====================
     function renderAttrFilter() {
@@ -759,10 +769,15 @@
       const forms = s.forms || [];
       const inline = forms.length ? `<details class="hv-inline"><summary>＋ 地区形态（${forms.length}）</summary><div class="hv-inline-list">${forms.map(f => esc(f.name)).join('、')}</div></details>` : '';
       const seasons = seasonTagsHtml(s, s.season);
+      const imgWrap = s.noImage
+        ? `<span class="rc-img-wrap" aria-hidden="true"></span>`
+        : `<span class="rc-img-wrap"><img class="rc-img" src="${imgOf(s.name)}" alt="${esc(s.name)}" loading="lazy" width="512" height="512"></span>`;
+      const note = s.note ? `<span class="rc-note">（${esc(s.note)}）</span>` : '';
       return `
         <span class="recommend-card hv-card">
-          <span class="rc-img-wrap"><img class="rc-img" src="${imgOf(s.name)}" alt="${esc(s.name)}" loading="lazy" width="512" height="512"></span>
+          ${imgWrap}
           <span class="rc-name">${esc(s.name)}</span>
+          ${note}
           <span class="rc-attr"><span class="rc-attr-label">第一属性：</span><img class="rc-attr-ico" src="${attrIcon(s.attr)}" alt=""><span class="rc-attr-name">${esc(s.attr)}</span></span>
           <span class="rc-foot">
             <span class="rc-star">${numCell(starOf, s.value)}</span>
@@ -825,7 +840,7 @@
         : `<span class="hv-slot" aria-hidden="true"></span>`;
       return `
         <tr>
-          <td class="hv-name"><span class="hv-name-in">${slot}<img class="hv-ava" src="${avatarOf(s.name)}" alt="" loading="lazy" width="256" height="256"><span class="hv-name-text">${esc(s.name)}</span></span></td>${dataCells(s, s.season)}
+          <td class="hv-name"><span class="hv-name-in">${slot}${avaCell(s.name, s.noImage)}<span class="hv-name-text">${esc(s.name)}${noteText(s.note)}</span></span></td>${dataCells(s, s.season)}
         </tr>${formsRows(s)}`;
     }
 

@@ -510,6 +510,55 @@
       "attrFull": "火 / 光"
     },
     {
+      "name": "智辉章脑",
+      "attr": "光",
+      "value": 80,
+      "stages": [
+        "章脑丸",
+        "智辉章脑"
+      ],
+      "season": "S4 月涌狂想",
+      "notBeforeSeason": "S3",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "S4赛季奇遇作业获取",
+      "attrFull": "光/水",
+      "note": "果实暂未开放获取"
+    },
+    {
+      "name": "未完虫",
+      "attr": "幽",
+      "value": 80,
+      "stages": [
+        "未完虫"
+      ],
+      "season": "S4 月涌狂想",
+      "notBeforeSeason": "S3",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 6000,
+      "obtain": "S4赛季奇遇作业获取",
+      "attrFull": "幽/虫",
+      "note": "果实暂未开放获取"
+    },
+    {
+      "name": "星星眼",
+      "attr": "幻",
+      "value": 60,
+      "stages": [
+        "星星眼"
+      ],
+      "season": "S4 月涌狂想",
+      "notBeforeSeason": "S3",
+      "notAfterSeason": "",
+      "mixPool": "",
+      "coin": 4500,
+      "obtain": "S4赛季奇遇作业获取",
+      "attrFull": "幻",
+      "note": "果实暂未开放获取"
+    },
+    {
       "name": "电企鹅",
       "attr": "电",
       "value": 80,
