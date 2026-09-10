@@ -730,6 +730,19 @@ a, a:link, a:visited, a:hover, a:active, a:focus { text-decoration: none; }
 .lnk-tag.t-general { background: #eaf3ff; color: #0b6bcb; border: 1px solid #cfe2fb; }
 .lnk-tag.t-pvp { background: #fdecea; color: #b71c1c; border: 1px solid #ef9a9a; }
 .lnk-tag.t-wiki { background: #ede7f6; color: #4527a0; border: 1px solid #d1c4e9; }
+
+/* ==================== 工具箱导航页 ==================== */
+/* 卡片副文本改为工具介绍（可换行，非链接）；卡片暂未上线，故不可点击 */
+.lnk-desc {
+  font-size: 12px; color: #9aa0a8; font-family: var(--font-text);
+  line-height: 1.55; overflow-wrap: anywhere;
+}
+.lnk-card.is-static { cursor: default; }
+.lnk-card.is-static:hover {
+  border-color: #e8e8e8; transform: none; box-shadow: none;
+}
+.lnk-card.is-static:hover .lnk-name { color: #1a1a2e; }
+.lnk-tile > svg.lnk-ico { fill: none; stroke: #1565c0; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 @media (max-width: 560px) {
   .lnk-card { padding: 8px 10px; gap: 10px; }
   .lnk-tile { width: 44px; height: 44px; }

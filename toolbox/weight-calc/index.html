@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../../icons.png">
+  <title>子代理论体重计算器 - RocoM Shiny Helper</title>
+  <link rel="stylesheet" href="../../css/site.css">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('../../sw.js').catch(() => {}); });
+    }
+  </script>
+  <style>
+    /* ==================== 子代体重理论值计算器（仅本页生效） ==================== */
+    .wc-back { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 600; color: #1565c0; margin-bottom: 10px; }
+    .wc-back:hover { text-decoration: underline; }
+    .wc-panel { background: #fff; border: 2px solid #e8e8e8; border-radius: 16px; padding: 20px; margin-top: 18px; }
+    .wc-panel h3 { font-size: 18px; font-weight: 700; margin: 0 0 14px; color: #1a1a2e; }
+    .wc-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 16px; }
+    .wc-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .wc-field label { font-size: 15px; font-weight: 600; color: #333; }
+    .wc-input {
+      width: 100%; padding: 11px 14px; border-radius: 10px; border: 2px solid #dee2e6;
+      font-size: 16px; background: #fff; color: #333; outline: none; font-family: var(--font-game);
+    }
+    .wc-input:focus { border-color: #9ec3ec; }
+    .wc-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .wc-stat { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 12px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .wc-stat-label { font-size: 13px; color: #8a919c; font-family: var(--font-text); }
+    .wc-stat-value { font-size: 22px; font-weight: 700; color: #1565c0; line-height: 1.2; overflow-wrap: anywhere; }
+    .wc-note { border-radius: 12px; padding: 12px 16px; margin-bottom: 14px; font-size: 14px; line-height: 1.7; font-family: var(--font-text); }
+    .wc-note:last-child { margin-bottom: 0; }
+    .wc-note.info { background: #eef4ff; border: 1px solid #c6d8f5; color: #2b4a7a; }
+    .wc-note.ok { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; }
+    .wc-note.warn { background: #fdecea; border: 1px solid #ef9a9a; color: #b71c1c; }
+    .wc-table-wrap { overflow-x: auto; }
+    .wc-table { width: 100%; min-width: 680px; border-collapse: collapse; font-family: var(--font-text); font-size: 14px; }
+    .wc-table th, .wc-table td { padding: 9px 12px; border-bottom: 1px solid #eef0f3; text-align: left; vertical-align: middle; }
+    .wc-table th { color: #5a6472; font-weight: 600; background: #f7f8fa; white-space: nowrap; }
+    .wc-table tr:last-child td { border-bottom: none; }
+    .wc-table tr.wc-hit td { background: #fff6ec; }
+    .wc-table tr.wc-hit td:first-child { box-shadow: inset 3px 0 0 #e65100; font-weight: 700; }
+    .wc-more { color: #9aa0a8; font-size: 13px; }
+    .wc-cell-in {
+      width: 100%; min-width: 104px; padding: 7px 10px; border-radius: 8px;
+      border: 1.5px solid #dee2e6; font-size: 14px; background: #fff; color: #333;
+      outline: none; font-family: var(--font-game);
+    }
+    .wc-cell-in:focus { border-color: #9ec3ec; }
+    .wc-float-val { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .wc-float-val.pos { color: #b07a2a; }
+    .wc-float-val.neg { color: #0b6bcb; }
+    .wc-float-val.zero { color: #1a1a2e; }
+    .wc-float-val.none { color: #b8bcc4; font-weight: 400; }
+    .wc-float-hint { margin-top: 14px; }
+    .wc-badge { display: inline-block; padding: 1px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; line-height: 1.7; white-space: nowrap; }
+    .wc-badge.big { background: #fdecea; color: #b71c1c; border: 1px solid #ef9a9a; }
+    .wc-badge.small { background: #eaf3ff; color: #0b6bcb; border: 1px solid #cfe2fb; }
+    .wc-badge.none { background: #eef0f3; color: #9aa0a8; border: 1px solid #e3e7ec; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <a class="brand" href="../../index.html"><img class="brand-ico" src="../../icons.png" alt=""><span>RocoM Shiny Helper</span></a>
+      <nav class="top-nav">
+        <a href="../../index.html">属性池匹配</a>
+        <a href="../../pages/high-value.html">高星光值精灵</a>
+        <a href="../../pages/pool-availability.html">混池可用性</a>
+        <a href="../../pages/toolbox.html">实用链接</a>
+        <a href="../../pages/changelog.html">更新日志</a>
+        <a class="gh" href="https://github.com/JayeGT002/Rocom-Shiny-Helper" target="_blank" rel="noopener" title="GitHub 仓库" aria-label="GitHub 仓库">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+      </nav>
+    </header>
+
+    <main class="page-card">
+      <a class="wc-back" href="../index.html">← 返回工具箱</a>
+      <h2>子代理论体重计算器</h2>
+      <p class="desc">
+        子代体重理论值 =（父本体重百分比 + 母本体重百分比）÷ 2。体型奖牌按族群前 2% 判定：理论值 &gt; 98.00% 必定「大块头」，&lt; 2.00% 必定「小不点」。
+        迭代（逐代繁育）时固定较极端的一方不变，每代用「固定方 × 上一代子代」再繁育。未填写实测值前按理论值判定，填写后该代改用实测值判定，且其后各代以该实测值作为亲本继续迭代。
+      </p>
+
+      <section class="wc-panel">
+        <h3>亲本、迭代与逐代浮动值</h3>
+        <div class="wc-inputs">
+          <div class="wc-field">
+            <label for="wc-father">父本体重百分比 (%)</label>
+            <input id="wc-father" class="wc-input" type="number" min="0" max="100" step="0.01" inputmode="decimal" placeholder="如 89.00">
+          </div>
+          <div class="wc-field">
+            <label for="wc-mother">母本体重百分比 (%)</label>
+            <input id="wc-mother" class="wc-input" type="number" min="0" max="100" step="0.01" inputmode="decimal" placeholder="如 99.00">
+          </div>
+        </div>
+
+        <div class="wc-summary" id="wc-summary"></div>
+
+        <div id="wc-result"></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>数据资源来自洛克王国世界WIKI，本项目遵循上游共享协议CC BY-NC-SA 4.0（署名-非商业性使用-相同方式共享）</p>
+      <p>本网站是由《洛克王国：世界》游戏爱好者，使用DeepSeek V4 Flash制作。网站所涉及的公司名称、商标、产品等均为其各自所有者的资产，仅供识别。</p>
+      <p>网站内使用的游戏图片、动画、音频、文本原文，仅用于更好地表现游戏资料，其版权归属《洛克王国：世界》项目组所有。</p>
+    </footer>
+  </div>
+
+  <script src="../../js/app.js" defer></script>
+  <script>
+    (function () {
+      const $ = id => document.getElementById(id);
+      const EPS = 1e-9;
+      const BIG = 98, SMALL = 2;
+      const CAP = 100;
+
+      const fEl = $('wc-father'), mEl = $('wc-mother');
+      const summaryEl = $('wc-summary'), resultEl = $('wc-result');
+
+      // 逐代实测体重输入（代数 -> 输入值），重建表格后保留
+      const actualVals = {};
+
+      const isNum = v => Number.isFinite(v);
+      const getNum = el => { const v = parseFloat(el.value); return Number.isFinite(v) ? v : NaN; };
+      const fmt = v => (Number.isFinite(v) ? v.toFixed(2) : '—');
+      const isBigHit = v => v > BIG + EPS;
+      const isSmallHit = v => v < SMALL - EPS;
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+      const HEAD = '<tr><th>代数</th><th>子代理论值</th><th>子代实际体重</th><th>浮动值</th><th>判定</th></tr>';
+      const FLOAT_HINT = '<div class="wc-note info wc-float-hint">「子代实际体重」填写后：该代判定改用实测值，且其后各代以该实测值作为亲本继续迭代；未填写的代按理论值判定。浮动值 = 该代实测值 − 理论值（实测更重 / 更大为正，更轻 / 更小为负）：迭代大块头时以正浮动为佳，迭代小不点时以负浮动为佳。</div>';
+
+      const sideName = s => (s === 'father' ? '父本' : '母本');
+      const medalName = m => (m === 'big' ? '大块头' : m === 'small' ? '小不点' : '（无）');
+
+      function badge(v) {
+        if (isBigHit(v)) return '<span class="wc-badge big">大块头</span>';
+        if (isSmallHit(v)) return '<span class="wc-badge small">小不点</span>';
+        return '<span class="wc-badge none">未达标</span>';
+      }
+
+      function floatText(th, actual) {
+        if (!Number.isFinite(actual)) return { text: '—', cls: 'none' };
+        const d = actual - th;
+        return { text: (d > 0 ? '+' : '') + d.toFixed(2) + '%', cls: d > 0 ? 'pos' : (d < 0 ? 'neg' : 'zero') };
+      }
+
+      // 逐代构建：本代理论值 =（固定方 + 上一代用于繁育的值）/ 2
+      // 上一代用于繁育的值：填了实测值则用实测值，否则用理论值
+      function buildRows(anchor, other, effMedal) {
+        const hit = effMedal === 'big' ? isBigHit : isSmallHit;
+        const rows = [];
+        let used = other;
+        let reachGen = null;
+        for (let k = 1; k <= CAP; k++) {
+          const th = (anchor + used) / 2;
+          const a = parseFloat(actualVals[k]);
+          const has = Number.isFinite(a);
+          const judge = has ? a : th;
+          rows.push({ k, th, actual: has ? a : null, judge });
+          if (hit(judge)) { reachGen = k; break; }
+          used = judge;
+        }
+        return { rows, reachGen };
+      }
+
+      // 单行：代数 / 理论值 / 实测输入 / 浮动值 / 判定（判定按实测值优先）
+      function rowHtml(r, hit) {
+        const ft = floatText(r.th, r.actual);
+        const val = esc(actualVals[r.k] != null ? actualVals[r.k] : '');
+        return `<tr${hit ? ' class="wc-hit"' : ''}>` +
+          `<td>第 ${r.k} 代</td>` +
+          `<td>${fmt(r.th)}%</td>` +
+          `<td><input class="wc-cell-in" data-gen="${r.k}" type="number" min="0" max="100" step="0.01" inputmode="decimal" placeholder="实测值" value="${val}"></td>` +
+          `<td><span class="wc-float-val ${ft.cls}" data-float="${r.k}" data-th="${r.th}">${ft.text}</span></td>` +
+          `<td data-badge="${r.k}">${badge(r.judge)}</td>` +
+          '</tr>';
+      }
+
+      // 输入实测值时只刷新本行（浮动值 + 判定），避免重建失焦；其后各代在 change 时重算
+      function syncRow(gen) {
+        const span = resultEl.querySelector(`[data-float="${gen}"]`);
+        const badgeEl = resultEl.querySelector(`[data-badge="${gen}"]`);
+        if (!span) return;
+        const th = parseFloat(span.dataset.th);
+        const a = parseFloat(actualVals[gen]);
+        const has = Number.isFinite(a);
+        const ft = floatText(th, has ? a : null);
+        span.textContent = ft.text;
+        span.className = 'wc-float-val ' + ft.cls;
+        if (badgeEl) badgeEl.innerHTML = badge(has ? a : th);
+      }
+
+      function renderResult(f, m, auto) {
+        const effMedal = auto.medal;
+
+        if (effMedal === 'none') {
+          resultEl.innerHTML = '<div class="wc-note warn">当前亲本中没有任何一方满足阈值（需一方 &gt; 98.00% 才能迭代出大块头，或一方 &lt; 2.00% 才能迭代出小不点）。填写实测体重后，将按实测值继续迭代。</div>';
+          return;
+        }
+
+        const side = effMedal === 'big' ? (f >= m ? 'father' : 'mother') : (f <= m ? 'father' : 'mother');
+        const anchor = side === 'father' ? f : m;
+        const other = side === 'father' ? m : f;
+        const thText = effMedal === 'big' ? '&gt; 98.00%' : '&lt; 2.00%';
+
+        const { rows, reachGen } = buildRows(anchor, other, effMedal);
+        const anyActual = rows.some(r => r.actual != null);
+
+        let display;
+        if (rows.length <= 20) display = rows;
+        else display = rows.slice(0, 6).concat(['…'], rows.slice(-3));
+
+        const body = display.map(item => {
+          if (item === '…') return `<tr><td colspan="5" class="wc-more">…中间省略 ${rows.length - 9} 代…</td></tr>`;
+          return rowHtml(item, item.k === reachGen);
+        }).join('');
+
+        let note;
+        if (reachGen != null) {
+          const rr = rows[rows.length - 1];
+          const src = rr.actual != null ? `实测 <b>${fmt(rr.actual)}%</b>` : `理论值 <b>${fmt(rr.th)}%</b>`;
+          note = `<div class="wc-note ok">固定<b>${sideName(side)}</b>迭代，第 <b>${reachGen}</b> 代${src} 达标（${medalName(effMedal)}）。共需繁育 <b>${reachGen}</b> 代。</div>`;
+        } else if (anyActual) {
+          note = `<div class="wc-note warn">按当前已填写的实测值，迭代 ${rows.length} 代仍未达标（${medalName(effMedal)}）。</div>`;
+        } else {
+          note = `<div class="wc-note warn">固定${sideName(side)}迭代时，理论值只会无限逼近 ${fmt(anchor)}%（不会超过），未填写实测值时无法达到${medalName(effMedal)}阈值（${thText}）；可填写实测体重后按实测值继续迭代。</div>`;
+        }
+
+        resultEl.innerHTML = note +
+          `<div class="wc-table-wrap"><table class="wc-table"><thead>${HEAD}</thead><tbody>${body}</tbody></table></div>` +
+          FLOAT_HINT;
+      }
+
+      function render() {
+        const f = getNum(fEl), m = getNum(mEl);
+        if (!(isNum(f) && isNum(m))) {
+          summaryEl.innerHTML = '<div class="wc-note info">请输入父本与母本的体重百分比（0–100）。</div>';
+          resultEl.innerHTML = '';
+          return;
+        }
+
+        const th1 = (f + m) / 2;
+        const auto = autoDecide(f, m);
+        summaryEl.innerHTML =
+          `<div class="wc-stat"><span class="wc-stat-label">子代理论值（第 1 代）</span><span class="wc-stat-value">${fmt(th1)}%</span></div>` +
+          `<div class="wc-stat"><span class="wc-stat-label">自动判定 · 建议固定一方</span><span class="wc-stat-value">${auto.anchor ? sideName(auto.anchor) : '—'}</span></div>` +
+          `<div class="wc-stat"><span class="wc-stat-label">自动判定 · 可达成奖牌</span><span class="wc-stat-value">${medalName(auto.medal)}</span></div>`;
+
+        renderResult(f, m, auto);
+      }
+
+      // 自动判定：可达成奖牌 + 建议固定的一方
+      function autoDecide(f, m) {
+        const bigSide = f >= m ? 'father' : 'mother';
+        const smallSide = f <= m ? 'father' : 'mother';
+        const canBig = Math.max(f, m) > BIG + EPS;
+        const canSmall = Math.min(f, m) < SMALL - EPS;
+        if (canBig && canSmall) {
+          const gb = pureReachGen(Math.max(f, m), Math.min(f, m), 'big');
+          const gs = pureReachGen(Math.min(f, m), Math.max(f, m), 'small');
+          if (gb != null && (gs == null || gb <= gs)) return { medal: 'big', anchor: bigSide };
+          return { medal: 'small', anchor: smallSide };
+        }
+        if (canBig) return { medal: 'big', anchor: bigSide };
+        if (canSmall) return { medal: 'small', anchor: smallSide };
+        return { medal: 'none', anchor: null };
+      }
+
+      // 纯理论（不考虑实测值）第几代达标，用于自动判定奖牌与固定方
+      function pureReachGen(anchor, other, medal) {
+        const hit = medal === 'big' ? isBigHit : isSmallHit;
+        for (let k = 1; k <= 400; k++) {
+          const th = anchor + (other - anchor) / Math.pow(2, k);
+          if (hit(th)) return k;
+        }
+        return null;
+      }
+
+      function onCellInput(e) {
+        const t = e.target;
+        if (!t.classList || !t.classList.contains('wc-cell-in')) return;
+        actualVals[t.dataset.gen] = t.value;
+        syncRow(t.dataset.gen);
+      }
+
+      function onCellChange(e) {
+        const t = e.target;
+        if (!t.classList || !t.classList.contains('wc-cell-in')) return;
+        actualVals[t.dataset.gen] = t.value;
+        render();
+      }
+
+      [fEl, mEl].forEach(el => {
+        el.addEventListener('input', render);
+        el.addEventListener('change', render);
+      });
+      resultEl.addEventListener('input', onCellInput);
+      resultEl.addEventListener('change', onCellChange);
+      resultEl.addEventListener('focusout', onCellChange);
+
+      render();
+    })();
+  </script>
+</body>
+</html>
