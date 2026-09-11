@@ -315,8 +315,7 @@
         list.forEach(s => {
           const ps = PETS.filter(p => p.season === s.id && (curKind === 'ALL' || p.kind === curKind));
           if (!ps.length) return;
-          const q = ps.filter(p => p.kind === '奇遇').length;
-          html += `<h2 class="eg-season-h">${ESC(s.id + ' ' + s.name)}<span class="eg-cnt">${ps.length} 只 · 奇遇 ${q} / 异色 ${ps.length - q}</span></h2><div class="eg-grid">`;
+          html += `<h2 class="eg-season-h">${ESC(s.id + ' ' + s.name)}<span class="eg-cnt">${ps.length} 只</span></h2><div class="eg-grid">`;
           ps.forEach(p => {
             const pills = p.groups.map(g => `<button class="eg-pill" data-group="${ESC(g)}" style="background:${gColor(g)}">${ESC(g)}</button>`).join('');
             const imgSrc = spriteImgOf(p.season, p.name);
@@ -510,6 +509,8 @@
           seasons.forEach((s, i) => {
             (seasonDocs[i].sprites || []).forEach(sp => {
               const attrs = [sp.attr1, sp.attr2].filter(Boolean);
+              const groups = (egg[s.id] && egg[s.id][sp.name]) || [];
+              if (!groups.length) return; // 无蛋组记录（如无法获得蛋的地区形态）不出现在蛋组传递
               PETS.push({
                 name: sp.name,
                 attrs,
@@ -517,7 +518,7 @@
                 kind: ((sp.group2 || sp.group) === 'resident') ? '异色' : '奇遇',
                 season: s.id,
                 season_full: `${s.id} ${s.name}`,
-                groups: (egg[s.id] && egg[s.id][sp.name]) || []
+                groups
               });
             });
           });
