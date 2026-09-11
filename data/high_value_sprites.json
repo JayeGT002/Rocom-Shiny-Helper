@@ -723,21 +723,20 @@
       "attrFull": "机械/幻"
     },
     {
-      "name": "波多西",
+      "name": "圣剑-X",
       "attr": "机械",
-      "value": 80,
+      "value": 60,
       "stages": [
-        "多西",
-        "库多西",
-        "波多西"
+        "圣剑侍从",
+        "圣剑-X"
       ],
       "season": "常驻精灵",
       "notBeforeSeason": "",
       "notAfterSeason": "",
       "mixPool": "",
-      "coin": 6000,
-      "obtain": "图鉴数量奖励",
-      "attrFull": "机械/地"
+      "coin": 4500,
+      "obtain": "圣剑侍从LV40进化",
+      "attrFull": "机械"
     },
     {
       "name": "铠甲虫",
