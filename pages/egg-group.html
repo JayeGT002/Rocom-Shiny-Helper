@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../icons.png">
+  <title>蛋组传递 - RocoM Shiny Helper</title>
+  <link rel="stylesheet" href="../css/site.css">
+  <style>
+    /* ==================== 蛋组传递页（仅本页生效） ==================== */
+    .eg-controls { display: flex; flex-direction: column; gap: 14px; margin-bottom: 6px; }
+    .eg-tabs { display: inline-flex; flex-wrap: wrap; background: #eceef1; border-radius: 10px; padding: 4px; gap: 3px; }
+    .eg-tab {
+      padding: 8px 16px; border: none; border-radius: 8px;
+      background: transparent; font-size: 15px; font-weight: 600;
+      color: #666; cursor: pointer; transition: all .15s; font-family: inherit;
+    }
+    .eg-tab.on { background: #fff; color: #1565c0; box-shadow: 0 1px 4px rgba(0,0,0,.12); }
+
+    .eg-gchip {
+      border: 0; border-radius: 999px; padding: 6px 14px;
+      font-size: 14px; font-weight: 700; color: #fff;
+      cursor: pointer; font-family: inherit; transition: transform .1s;
+    }
+    .eg-gchip:hover { transform: translateY(-1px); }
+
+    .eg-season-h {
+      display: flex; align-items: center; gap: 10px;
+      margin: 26px 0 12px; font-size: 18px; font-weight: 700; color: #1a1a2e;
+    }
+    .eg-cnt { font-size: 13px; font-weight: 400; color: #8a919c; font-family: var(--font-text); }
+
+    .eg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(184px, 1fr)); gap: 12px; }
+    /* 精灵卡直接复用站点 .sprite-card（立绘 120² + 名称两行 + 属性），此处只补蛋组标签行 */
+    .eg-pills { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
+    .eg-pill {
+      border: 0; border-radius: 999px; padding: 3px 10px;
+      font-size: 12px; font-weight: 600; color: #fff;
+      cursor: pointer; font-family: inherit; transition: filter .1s;
+    }
+    .eg-pill:hover { filter: brightness(1.08); }
+    .eg-tgt { outline: 2px solid #7CB342; outline-offset: 1px; }
+
+    .eg-legend { display: none; }
+
+    /* 弹层 */
+    .eg-mask { position: fixed; inset: 0; background: rgba(0,0,0,.5); display: none; z-index: 50; }
+    .eg-mask.show { display: block; }
+    .eg-sheet {
+      position: fixed; left: 50%; bottom: 0; transform: translate(-50%, 105%);
+      width: 100%; max-width: 600px; max-height: 84vh; background: #fff;
+      border-radius: 18px 18px 0 0; z-index: 51; display: flex; flex-direction: column;
+      transition: transform .28s ease; box-shadow: 0 -8px 30px rgba(0,0,0,.18);
+    }
+    .eg-sheet.show { transform: translate(-50%, 0); }
+    @media (min-width: 600px) {
+      .eg-sheet {
+        bottom: auto; top: 50%; transform: translate(-50%, -50%) scale(.96);
+        border-radius: 18px; opacity: 0; transition: all .22s ease;
+        max-width: 940px;
+      }
+      .eg-sheet.show { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    .eg-sheet-head { padding: 16px 18px 12px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eef0f3; }
+    .eg-sheet-title { font-size: 19px; font-weight: 800; color: #fff; padding: 5px 16px; border-radius: 999px; }
+    .eg-sheet-title.plain { background: transparent !important; color: #1a1a2e; padding: 0; font-size: 20px; }
+    .eg-sheet-cnt { color: #8a919c; font-size: 13px; font-family: var(--font-text); }
+    .eg-sheet-close {
+      margin-left: auto; background: #eef0f3; border: 0; width: 32px; height: 32px;
+      border-radius: 50%; font-size: 15px; cursor: pointer; color: #555; font-family: inherit;
+    }
+    .eg-sheet-body { overflow-y: auto; padding: 14px 18px 22px; }
+
+    .eg-sec { font-size: 14px; color: #5b6472; margin: 16px 0 8px; font-weight: 700; }
+    .eg-sec:first-child { margin-top: 2px; }
+    .eg-sec-row { display: flex; align-items: center; gap: 8px; }
+    .eg-pet-filter {
+      font-family: var(--font-text); font-size: 14px; color: #555;
+      border: 1px solid #e0e3e8; border-radius: 8px; padding: 2px 8px;
+      background: #fff; cursor: pointer; outline: none; margin-left: auto;
+    }
+    .eg-pet-filter:focus { border-color: #1565c0; }
+    .eg-transfer { display: flex; flex-direction: column; gap: 7px; }
+    .eg-trow {
+      display: flex; align-items: center; gap: 8px; background: #fff;
+      border: 1px solid #e8e8e8; border-radius: 10px; padding: 8px 10px; cursor: pointer;
+    }
+    .eg-trow:hover { background: #f7f8fa; }
+    .eg-via { color: #9aa0a6; font-size: 12px; margin-left: auto; text-align: right; max-width: 54%; font-family: var(--font-text); }
+    .eg-via b { color: #5b6472; }
+    .eg-steps { display: flex; gap: 6px; flex-wrap: wrap; }
+    .eg-step {
+      border: 0; border-radius: 999px; padding: 4px 11px; font-size: 12.5px;
+      color: #fff; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+    .eg-step small { font-weight: 400; opacity: .85; }
+    .eg-members { display: flex; flex-direction: column; gap: 6px; }
+    .eg-mrow {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      background: #fff; border: 1px solid #e8e8e8; border-radius: 10px;
+      padding: 7px 10px; font-size: 13.5px; color: #1a1a2e; cursor: pointer;
+    }
+    .eg-mrow:hover { background: #f7f8fa; }
+    .eg-mrow .eg-mname { font-weight: 600; }
+    .eg-mrow-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; flex: 1 1 auto; min-width: 0; }
+    .eg-mrow-egs { display: flex; flex-wrap: wrap; gap: 5px; flex: 0 0 100%; margin-top: 2px; }
+    .eg-ava { width: 32px; height: 32px; object-fit: contain; flex: none; }
+    .eg-rowseason { margin-left: auto; }
+    .eg-head-meta { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; vertical-align: middle; font-family: var(--font-game); }
+    .eg-head-meta .hv-season, .eg-head-meta .sprite-attr { font-family: var(--font-game); }
+    .eg-target { display: flex; align-items: center; gap: 7px; }
+    .eg-target .eg-ava { width: 28px; height: 28px; }
+    .eg-sheet-ava { width: 40px; height: 40px; object-fit: contain; flex: none; }
+    .eg-sheet-ava[hidden] { display: none; }
+    .eg-route { display: flex; flex-direction: column; gap: 7px; }
+    .eg-rrow { background: #fff; border: 1px solid #e8e8e8; border-radius: 10px; padding: 8px 10px; }
+    .eg-rflow { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .eg-arrow { color: #c2c8d0; font-size: 12px; }
+    .eg-rvia { color: #9aa0a6; font-size: 12px; margin-top: 5px; font-family: var(--font-text); }
+    .eg-rvia b { color: #5b6472; }
+
+    /* PC 双栏：左栏主信息，右栏传递/接力信息；移动端仍单栏 */
+    .eg-cols { display: block; }
+    @media (min-width: 760px) {
+      .eg-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 2px 22px; align-items: start; }
+      .eg-col-side { border-left: 1px dashed #e3e7ec; padding-left: 22px; }
+    }
+    /* 接力分组折叠 */
+    .eg-fold { margin: 0 0 10px; }
+    .eg-fold > summary {
+      list-style: none; cursor: pointer;
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 10px; border-radius: 9px; background: #f3f5f8;
+      font-size: 13.5px; font-weight: 700; color: #5b6472;
+    }
+    .eg-fold > summary::-webkit-details-marker { display: none; }
+    .eg-fold > summary::before {
+      content: ''; flex: none; width: 0; height: 0;
+      border-left: 5px solid #8a919c;
+      border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+      transition: transform .15s;
+    }
+    .eg-fold[open] > summary::before { transform: rotate(90deg); }
+    .eg-fold-n { margin-left: auto; font-size: 12px; font-weight: 600; color: #9aa0a6; font-family: var(--font-text); }
+    .eg-fold > .eg-route { margin-top: 8px; }
+    .eg-empty { color: #9aa0a6; font-size: 13px; padding: 6px 2px; font-family: var(--font-text); }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <a class="brand" href="../index.html"><img class="brand-ico" src="../icons.png" alt=""><span>RocoM Shiny Helper</span></a>
+      <nav class="top-nav">
+        <a href="../index.html">属性池匹配</a>
+        <a href="high-value.html">高星光值精灵</a>
+        <a href="pool-availability.html">混池可用性</a>
+        <a class="active" href="egg-group.html">蛋组传递</a>
+        <a href="toolbox.html">实用链接</a>
+        <a href="changelog.html">更新日志</a>
+        <a class="gh" href="https://github.com/JayeGT002/Rocom-Shiny-Helper" target="_blank" rel="noopener" title="GitHub 仓库" aria-label="GitHub 仓库">
+          <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        </a>
+      </nav>
+    </header>
+
+    <main class="eg-main">
+      <div class="page-head">
+        <div class="page-title">
+          <h1>蛋组传递</h1>
+          <p class="page-sub">S1–S4 全赛季 · 点精灵卡看获取路线 · 点蛋组标签看传递关系</p>
+        </div>
+      </div>
+
+      <div class="eg-controls">
+        <div class="attr-filter">
+          <span class="mode-label">赛季</span>
+          <div class="eg-tabs" id="eg-season-tabs"></div>
+        </div>
+        <div class="attr-filter">
+          <span class="mode-label">分类</span>
+          <div class="eg-tabs" id="eg-kind-tabs"></div>
+        </div>
+        <div class="attr-filter">
+          <span class="mode-label">蛋组</span>
+          <div class="attr-filter-buttons" id="eg-group-chips"></div>
+        </div>
+      </div>
+
+      <div class="loading" id="eg-loading">正在加载赛季数据…</div>
+
+      <div id="eg-content" style="display: none;"></div>
+    </main>
+
+    <footer class="footer">
+      <p>数据资源来自洛克王国世界WIKI，本项目遵循上游共享协议CC BY-NC-SA 4.0（署名-非商业性使用-相同方式共享）</p>
+      <p>本网站是由《洛克王国：世界》游戏爱好者，使用DeepSeek V4 Flash制作。网站所涉及的公司名称、商标、产品等均为其各自所有者的资产，仅供识别。</p>
+      <p>网站内使用的游戏图片、动画、音频、文本原文，仅用于更好地表现游戏资料，其版权归属《洛克王国：世界》项目组所有。</p>
+    </footer>
+  </div>
+
+  <div class="eg-mask" id="eg-mask"></div>
+  <div class="eg-sheet" id="eg-sheet" role="dialog" aria-modal="true">
+    <div class="eg-sheet-head">
+      <img class="eg-sheet-ava" id="eg-sheet-ava" alt="" hidden>
+      <span class="eg-sheet-title" id="eg-sheet-title"></span>
+      <span class="eg-sheet-cnt" id="eg-sheet-cnt"></span>
+      <button class="eg-sheet-close" id="eg-sheet-close" aria-label="关闭">✕</button>
+    </div>
+    <div class="eg-sheet-body" id="eg-sheet-body"></div>
+  </div>
+
+  <script src="../js/app.js" defer></script>
+  <script>
+    (function () {
+      const base = location.pathname.indexOf('/pages/') >= 0 ? '..' : '.';
+      const $ = id => document.getElementById(id);
+      const ESC = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+      // 蛋组配色（与站内其他页的浅色主题协调）
+      const GC = {
+        '妖精组': '#E2559F', '动物组': '#C0392B', '巨灵组': '#2E86C1', '海洋组': '#17A2B8',
+        '植物组': '#7CB342', '昆虫组': '#4E4E56', '魔力组': '#8E44AD', '大地组': '#D4AC0D',
+        '拟人组': '#5DADE2', '机械组': '#138D90', '天空组': '#CD6155', '两栖组': '#E67E22',
+        '软体组': '#7F8C8D', '飞龙组': '#34495E'
+      };
+      const gColor = g => GC[g] || '#9aa0a6';
+
+      let seasons = [], PETS = [], GROUPS = [], curTab = 'ALL', curKind = 'ALL';
+      let ADJ = {}, BRIDGE = {};
+      const SEASON_META = {};
+      let yiseImages = {};
+      const swapItems = [];
+      const SWAP_INTERVAL = 5000;
+
+      const avaOf = (sid, name) => `${base}/images/${sid}/avatars/${encodeURIComponent(name)}.webp`;
+      const spriteImgOf = (sid, name) => `${base}/images/${sid}/${encodeURIComponent(name)}.webp`;
+      // 赛季 tag：与「高星光值精灵」页完全一致（.hv-season + 赛季主题色，按背景亮度取字色）
+      function bgLuminance(hex) {
+        const n = parseInt(String(hex).replace('#', ''), 16);
+        return (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+      }
+      function seasonTag(sid, cls) {
+        const m = SEASON_META[sid] || { full: sid, color: '#6b7280' };
+        const fg = bgLuminance(m.color) > 0.6 ? '#1d2a3c' : '#fff';
+        return `<span class="hv-season${cls ? ' ' + cls : ''}" style="background:${m.color};color:${fg}">${ESC(m.full)}</span>`;
+      }
+
+      // 常规/异色交替（与赛季页一致）：双图交叠，异色图滚动临近视口(300px)才发起请求，每 5s 切换
+      function setupSwap(wrap, img, sid, name) {
+        if (!wrap || !img || !name) return;
+        if (!(yiseImages[sid] || []).includes(name)) return;
+        const origSrc = img.getAttribute('src');
+        if (!origSrc) return;
+        const altSrc = origSrc.replace(/\.webp$/, '_异色.webp');
+        const alt = document.createElement('img');
+        alt.alt = name;
+        alt.width = 512; alt.height = 512;
+        alt.style.opacity = '0';
+        wrap.appendChild(alt);
+        wrap.classList.add('sw-ready');
+        img.style.opacity = '1';
+        let requested = false;
+        const io = new IntersectionObserver(entries => {
+          if (requested) { io.disconnect(); return; }
+          if (entries.some(e => e.isIntersecting)) { requested = true; alt.src = altSrc; io.disconnect(); }
+        }, { rootMargin: '300px' });
+        io.observe(wrap);
+        swapItems.push({ wrap, a: img, b: alt, showA: true });
+      }
+      setInterval(() => {
+        for (let i = swapItems.length - 1; i >= 0; i--) if (!swapItems[i].wrap.isConnected) swapItems.splice(i, 1);
+        swapItems.forEach(it => {
+          const cur = it.showA ? it.a : it.b;
+          const nxt = it.showA ? it.b : it.a;
+          it.showA = !it.showA;
+          cur.style.opacity = '0';
+          nxt.style.opacity = '1';
+        });
+      }, SWAP_INTERVAL);
+
+      // 蛋组图：两个蛋组只要出现在同一只精灵身上，即视为可相互传递（同组可孵）
+      function buildGraph() {
+        GROUPS.forEach(g => { ADJ[g] = new Set(); BRIDGE[g] = {}; });
+        PETS.forEach(p => {
+          if (p.groups.length === 2) {
+            const [a, b] = p.groups;
+            ADJ[a].add(b); ADJ[b].add(a);
+            (BRIDGE[a][b] = BRIDGE[a][b] || []).push(p.name);
+            (BRIDGE[b][a] = BRIDGE[b][a] || []).push(p.name);
+          }
+        });
+      }
+      function bfs(src) {
+        const dist = { [src]: 0 }, prev = {}, q = [src];
+        while (q.length) {
+          const x = q.shift();
+          for (const y of ADJ[x]) if (!(y in dist)) { dist[y] = dist[x] + 1; prev[y] = x; q.push(y); }
+        }
+        return { dist, prev };
+      }
+
+      function nameHtml(n) {
+        const m = n.match(/^(.+?)（(.+)）$/);
+        if (m) return `<span class="nm-main">${ESC(m[1])}</span><span class="nm-sub">（${ESC(m[2])}）</span>`;
+        return `<span class="nm-main">${ESC(n)}</span><span class="nm-sub"></span>`;
+      }
+      function attrIcons(attrs) {
+        return attrs.map(a => `<span class="sprite-attr"><img src="${base}/images/attrs/${encodeURIComponent(a)}.webp" alt="${ESC(a)}" loading="lazy" width="198" height="198">${ESC(a)}</span>`).join('');
+      }
+
+      /* ---------- 主视图 ---------- */
+      function render() {
+        const list = seasons.filter(s => curTab === 'ALL' || s.id === curTab);
+        let html = '';
+        list.forEach(s => {
+          const ps = PETS.filter(p => p.season === s.id && (curKind === 'ALL' || p.kind === curKind));
+          if (!ps.length) return;
+          const q = ps.filter(p => p.kind === '奇遇').length;
+          html += `<h2 class="eg-season-h">${ESC(s.id + ' ' + s.name)}<span class="eg-cnt">${ps.length} 只 · 奇遇 ${q} / 异色 ${ps.length - q}</span></h2><div class="eg-grid">`;
+          ps.forEach(p => {
+            const pills = p.groups.map(g => `<button class="eg-pill" data-group="${ESC(g)}" style="background:${gColor(g)}">${ESC(g)}</button>`).join('');
+            const imgSrc = spriteImgOf(p.season, p.name);
+            html += `<div class="sprite-card eg-card" data-pet="${ESC(p.name)}" data-season="${ESC(p.season)}">
+              <span class="sprite-img-wrap">
+                <img class="sprite-img" src="${imgSrc}" alt="${ESC(p.name)}" loading="lazy" width="512" height="512"
+                     onload="this.parentNode.classList.add('has-img')"
+                     onerror="this.parentNode.classList.remove('has-img');this.style.visibility='hidden'">
+              </span>
+              <span class="sprite-name">${nameHtml(p.name)}</span>
+              <span class="sprite-attrs">${attrIcons(p.attrs)}</span>
+              <div class="eg-pills">${pills || '<span class="eg-empty">蛋组待补</span>'}</div>
+            </div>`;
+          });
+          html += '</div>';
+        });
+        const content = $('eg-content');
+        content.innerHTML = html;
+        // 卡片重建后重挂「常规/异色」交替（异色图仅在滚动临近视口时才请求）
+        content.querySelectorAll('.sprite-card').forEach(card => {
+          setupSwap(card.querySelector('.sprite-img-wrap'), card.querySelector('.sprite-img'), card.dataset.season, card.dataset.pet);
+        });
+      }
+
+      /* ---------- 弹层公共 ---------- */
+      const mask = $('eg-mask'), sheet = $('eg-sheet'), sheetBody = $('eg-sheet-body');
+      function setSheet(title, bg, cntHtml, bodyHtml, avatarUrl, plainTitle) {
+        const t = $('eg-sheet-title');
+        t.textContent = title; t.style.background = bg;
+        t.classList.toggle('plain', !!plainTitle);
+        const ava = $('eg-sheet-ava');
+        if (avatarUrl) { ava.src = avatarUrl; ava.hidden = false; } else { ava.removeAttribute('src'); ava.hidden = true; }
+        $('eg-sheet-cnt').innerHTML = cntHtml;
+        sheetBody.innerHTML = bodyHtml;
+        sheetBody.scrollTop = 0;
+        mask.classList.add('show'); sheet.classList.add('show');
+      }
+      function closeSheet() { mask.classList.remove('show'); sheet.classList.remove('show'); }
+      mask.addEventListener('click', closeSheet);
+      $('eg-sheet-close').addEventListener('click', closeSheet);
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheet(); });
+
+      /* ---------- 蛋组视图：该蛋组能与谁传递 ---------- */
+      function openGroup(g) {
+        const members = PETS.filter(p => p.groups.includes(g));
+        const { dist } = bfs(g);
+        const direct = [...(ADJ[g] || [])].sort((a, b) => dist[a] - dist[b]);
+        const chain = Object.keys(dist).filter(x => x !== g).sort((a, b) => dist[a] - dist[b] || a.localeCompare(b, 'zh'));
+        const maxD = chain.length ? Math.max(...chain.map(x => dist[x])) : 0;
+
+        let side = `<h4 class="eg-sec">直接可传递（同组可孵）</h4><div class="eg-transfer">`;
+        if (!direct.length) side += `<div class="eg-empty">该蛋组未与其它蛋组同组</div>`;
+        direct.forEach(t => {
+          const via = (BRIDGE[g][t] || []).join('、');
+          side += `<div class="eg-trow" data-group="${ESC(t)}"><span class="eg-pill" style="background:${gColor(t)}">${ESC(t)}</span><span class="eg-via">经由 <b>${ESC(via)}</b></span></div>`;
+        });
+        side += `</div>`;
+
+        if (chain.length) {
+          side += `<h4 class="eg-sec">全链可达（最多 ${maxD} 步接力）</h4><div class="eg-steps">`;
+          chain.forEach(t => { side += `<button class="eg-step" data-group="${ESC(t)}" style="background:${gColor(t)}">${ESC(t)}<small> ${dist[t]}步</small></button>`; });
+          side += `</div>`;
+        }
+
+        let main = `<h4 class="eg-sec">本组成员（全赛季 ${members.length} 只）</h4><div class="eg-members">`;
+        members.forEach(p => {
+          const other = p.groups.find(x => x !== g);
+          main += `<div class="eg-mrow" data-pet="${ESC(p.name)}">
+            <div class="eg-mrow-top">
+              <img class="eg-ava" src="${avaOf(p.season, p.name)}" alt="" loading="lazy" width="32" height="32">
+              <span class="eg-mname">${ESC(p.name)}</span>
+              ${attrIcons(p.attrs)}
+              ${seasonTag(p.season, 'eg-rowseason')}
+            </div>
+            ${other ? `<div class="eg-mrow-egs"><button class="eg-pill" data-group="${ESC(other)}" style="background:${gColor(other)}">${ESC(other)}</button></div>` : ''}
+          </div>`;
+        });
+        main += `</div>`;
+
+        setSheet(g, gColor(g), `${members.length} 只精灵 · 直接连 ${direct.length} 组`,
+          `<div class="eg-cols"><div class="eg-col-main">${main}</div><div class="eg-col-side">${side}</div></div>`);
+      }
+
+      /* ---------- 精灵视图：如何传递获得 ---------- */
+      function openPet(name, seasonFilter) {
+        const p = PETS.find(q => q.name === name);
+        if (!p) return;
+        // 多源 BFS：从该精灵的所有蛋组同时出发
+        const dist = {}, next = {}, queue = [];
+        p.groups.forEach(g => { dist[g] = 0; queue.push(g); });
+        while (queue.length) {
+          const x = queue.shift();
+          for (const y of ADJ[x]) if (!(y in dist)) { dist[y] = dist[x] + 1; next[y] = x; queue.push(y); }
+        }
+        const tgt = p.groups[p.groups.length - 1];
+        const pathFrom = s => { const path = [s]; let cur = s; while (dist[cur] > 0) { cur = next[cur]; path.push(cur); } return path; };
+
+        let main = '';
+
+        // 同组直接可孵：可按赛季筛选（默认全部）
+        const allPartners = PETS.filter(q => q !== p && q.groups.some(g => p.groups.includes(g)));
+        const partners = seasonFilter ? allPartners.filter(t => t.season === seasonFilter) : allPartners;
+        const opts = ['ALL'].concat(seasons.map(s => s.id))
+          .map(s => `<option value="${s}"${(seasonFilter || 'ALL') === s ? ' selected' : ''}>${s === 'ALL' ? '全部赛季' : ESC(SEASON_META[s].full)}</option>`).join('');
+        main += `<h4 class="eg-sec eg-sec-row">同组直接可孵（${partners.length} 只）
+          <select class="eg-pet-filter" data-pet="${ESC(p.name)}">${opts}</select>
+        </h4><div class="eg-members">`;
+        if (!partners.length) main += `<div class="eg-empty">该赛季暂无同组可孵伙伴</div>`;
+        partners.forEach(t => {
+          const shared = t.groups.filter(g => p.groups.includes(g));
+          main += `<div class="eg-mrow" data-pet="${ESC(t.name)}">
+            <div class="eg-mrow-top">
+              <img class="eg-ava" src="${avaOf(t.season, t.name)}" alt="" loading="lazy" width="32" height="32">
+              <span class="eg-mname">${ESC(t.name)}</span>
+              ${attrIcons(t.attrs)}
+              ${seasonTag(t.season, 'eg-rowseason')}
+            </div>
+            <div class="eg-mrow-egs">${shared.map(g => `<button class="eg-pill" data-group="${ESC(g)}" style="background:${gColor(g)}">${ESC(g)}</button>`).join('')}</div>
+          </div>`;
+        });
+        main += `</div>`;
+
+        let side = '';
+        const maxHop = Math.max(...Object.values(dist));
+        for (let h = 1; h <= maxHop; h++) {
+          const srcs = GROUPS.filter(g => dist[g] === h);
+          if (!srcs.length) continue;
+          side += `<details class="eg-fold" open><summary>${h} 步接力<span class="eg-fold-n">${srcs.length} 条</span></summary><div class="eg-route">`;
+          srcs.forEach(s => {
+            const path = pathFrom(s);
+            const flow = path.map((g, i) => {
+              const isTgt = (g === tgt && i === path.length - 1) ? ' eg-tgt' : '';
+              return `<button class="eg-pill${isTgt}" data-group="${ESC(g)}" style="background:${gColor(g)}">${ESC(g)}</button>`;
+            }).join('<span class="eg-arrow">→</span>');
+            const vias = [];
+            for (let i = 0; i < path.length - 1; i++) vias.push(BRIDGE[path[i]][path[i + 1]][0]);
+            side += `<div class="eg-rrow"><div class="eg-rflow">${flow}</div><div class="eg-rvia">经 ${ESC(vias.join(' → '))}</div></div>`;
+          });
+          side += `</div></details>`;
+        }
+        if (!side) side = `<div class="eg-empty">该精灵没有可接力传递的其它蛋组</div>`;
+
+        setSheet(p.name, gColor(p.groups[0]),
+          `<span class="eg-head-meta">${attrIcons(p.attrs)}${p.groups.map(g => `<button class="eg-pill" data-group="${ESC(g)}" style="background:${gColor(g)}">${ESC(g)}</button>`).join('')}${seasonTag(p.season)}</span>`,
+          `<div class="eg-cols"><div class="eg-col-main">${main}</div><div class="eg-col-side">${side}</div></div>`,
+          avaOf(p.season, p.name), true);
+      }
+
+      /* ---------- 事件（委托） ---------- */
+      document.addEventListener('change', e => {
+        const sel = e.target.closest('.eg-pet-filter');
+        if (sel) openPet(sel.dataset.pet, sel.value === 'ALL' ? undefined : sel.value);
+      });
+      document.addEventListener('click', e => {
+        const gEl = e.target.closest('[data-group]');
+        if (gEl) { openGroup(gEl.dataset.group); return; }
+        const pEl = e.target.closest('[data-pet]');
+        if (pEl && !pEl.closest('.eg-pet-filter') && !(e.target.closest('.eg-pet-filter'))) { openPet(pEl.dataset.pet); }
+      });
+      $('eg-season-tabs').addEventListener('click', e => {
+        const b = e.target.closest('[data-season]');
+        if (!b) return;
+        curTab = b.dataset.season;
+        document.querySelectorAll('#eg-season-tabs .eg-tab').forEach(x => x.classList.toggle('on', x === b));
+        render();
+      });
+      $('eg-kind-tabs').addEventListener('click', e => {
+        const b = e.target.closest('[data-kind]');
+        if (!b) return;
+        curKind = b.dataset.kind;
+        document.querySelectorAll('#eg-kind-tabs .eg-tab').forEach(x => x.classList.toggle('on', x === b));
+        render();
+      });
+
+      /* ---------- 启动 ---------- */
+      async function init() {
+        try {
+          const sData = await fetch(`${base}/data/seasons.json`).then(r => r.json());
+          seasons = (sData.seasons || []).map(s => ({ id: s.id, name: s.name }));
+          (sData.seasons || []).forEach(s => {
+            SEASON_META[s.id] = { full: `${s.id} ${s.name}`, color: s.themeColor || '#666' };
+          });
+
+          const [egg, yise, ...seasonDocs] = await Promise.all([
+            fetch(`${base}/data/egg_groups.json`).then(r => r.json()),
+            fetch(`${base}/data/yise_images.json`).then(r => r.json()),
+            ...seasons.map(s => fetch(`${base}/data/${s.id}.json`).then(r => r.json()))
+          ]);
+          yiseImages = yise || {};
+
+          seasons.forEach((s, i) => {
+            (seasonDocs[i].sprites || []).forEach(sp => {
+              const attrs = [sp.attr1, sp.attr2].filter(Boolean);
+              PETS.push({
+                name: sp.name,
+                attrs,
+                attrText: attrs.join('/'),
+                kind: ((sp.group2 || sp.group) === 'resident') ? '异色' : '奇遇',
+                season: s.id,
+                season_full: `${s.id} ${s.name}`,
+                groups: (egg[s.id] && egg[s.id][sp.name]) || []
+              });
+            });
+          });
+
+          // 蛋组清单：以配色表为序，仅保留实际出现的组
+          const used = new Set();
+          PETS.forEach(p => p.groups.forEach(g => used.add(g)));
+          GROUPS = Object.keys(GC).filter(g => used.has(g)).concat([...used].filter(g => !(g in GC)));
+          buildGraph();
+
+          $('eg-season-tabs').innerHTML = [{ id: 'ALL', label: '全部赛季' }]
+            .concat(seasons.map(s => ({ id: s.id, label: `${s.id} ${s.name}` })))
+            .map(t => `<button class="eg-tab${t.id === curTab ? ' on' : ''}" data-season="${ESC(t.id)}">${ESC(t.label)}</button>`).join('');
+
+          $('eg-kind-tabs').innerHTML = [{ id: 'ALL', label: '全部' }, { id: '奇遇', label: '赛季奇遇' }, { id: '异色', label: '常驻异色' }]
+            .map(t => `<button class="eg-tab${t.id === curKind ? ' on' : ''}" data-kind="${ESC(t.id)}">${ESC(t.label)}</button>`).join('');
+
+          $('eg-group-chips').innerHTML = GROUPS
+            .map(g => `<button class="eg-gchip" data-group="${ESC(g)}" style="background:${gColor(g)}">${ESC(g)}</button>`).join('');
+
+          render();
+          $('eg-loading').style.display = 'none';
+          $('eg-content').style.display = 'block';
+        } catch (err) {
+          $('eg-loading').textContent = '赛季数据加载失败，请通过本地服务器访问（如：python -m http.server 8080）。';
+        }
+      }
+      init();
+    })();
+  </script>
+</body>
+</html>
