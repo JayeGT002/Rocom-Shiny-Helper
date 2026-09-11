@@ -27,6 +27,13 @@
       <h2>更新日志</h2>
       <ul class="changelog">
         <li>
+          <span class="ver">v4.1.1</span>圣剑-X 获取方式修正与残留缓存清理<span class="date">2026-09-11</span>
+          <ul>
+            <li>修正「圣剑-X」的获取方式为「抓20只最高阶课题领取」</li>
+            <li>新增一次性清理脚本：主动注销历史遗留的 Service Worker 并清空其缓存，避免曾访问过旧版（v4.1.0 移除 sw.js 之前）的浏览器持续命中旧缓存、最长 7 天（数据/代码）/ 30 天（图片）看不到更新</li>
+          </ul>
+        </li>
+        <li>
           <span class="ver">v4.1.0</span>工具箱与子代理论体重计算器<span class="date">2026-09-10</span>
           <ul>
             <li>新增「工具箱」页面（toolbox/），作为本站自制工具的导航入口</li>

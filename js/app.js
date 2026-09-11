@@ -1,4 +1,17 @@
 // 全站共享 JS（子页无 #season-select 时自动跳过）
+//
+// 一次性清理：注销历史遗留的 Service Worker 并清空其缓存
+// sw.js 已于 v4.1.0 移除，但老访客浏览器里的旧 SW 不会自动注销，
+// 仍会以 cache-first 命中最长 7 天（css/js/json）/ 30 天（图片）的旧缓存，导致看不到更新。
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations()
+    .then(rs => { rs.forEach(r => r.unregister()); })
+    .catch(() => {});
+}
+if (typeof caches !== 'undefined') {
+  caches.keys().then(ks => ks.forEach(k => caches.delete(k))).catch(() => {});
+}
+
 (() => {
   function initMatcher() {
     if (!document.getElementById('season-select')) return;
