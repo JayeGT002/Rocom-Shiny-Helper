@@ -241,6 +241,7 @@
     .attr-btn img { width: 22px; height: 22px; border-radius: 50%; }
     .attr-btn.active { border-color: var(--ac); background: var(--abg); color: var(--ac); }
     .attr-btn.all { padding: 6px 14px; }
+    .attr-btn.stage { padding: 6px 14px; }
 
     /* 属性筛选下不可命中精灵：置灰不可选 */
     .sprite-card.disabled {

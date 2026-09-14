@@ -629,7 +629,7 @@ if (typeof caches !== 'undefined') {
     const app = document.getElementById('high-value-app');
     if (!app) return;
     const base = (location.pathname.indexOf('/pages/') >= 0) ? '..' : '.';
-    const state = { sprites: [], seasonMap: {}, view: 'attr', f: { attr: '', value: '' } };
+    const state = { sprites: [], seasonMap: {}, view: 'attr', f: { attr: '', value: '', stage: '' } };
     const ORDER = ['普通','草','火','水','光','地','冰','龙','电','毒','虫','武','翼','萌','幽','恶','机械','幻'];
     const attrColors = {
       "普通": "#3080B0", "草": "#40B070", "火": "#D05020", "水": "#60A0F0",
@@ -641,6 +641,7 @@ if (typeof caches !== 'undefined') {
     const content = document.getElementById('hv-content');
     const attrBtnWrap = document.getElementById('hv-attr-buttons');
     const valueBtnWrap = document.getElementById('hv-value-buttons');
+    const stageBtnWrap = document.getElementById('hv-stage-buttons');
     const cn = ['一','二','三','四','五','六','七','八','九','十'];
     const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
     const attrIcon = a => `${base}/images/attrs/${encodeURIComponent(a)}.webp`;
@@ -758,6 +759,35 @@ if (typeof caches !== 'undefined') {
       values.forEach(v => makeBtn(v, String(v)));
     }
 
+    function renderStageFilter() {
+      if (!stageBtnWrap) return;
+      stageBtnWrap.innerHTML = '';
+      const stageColor = '#7a6ff0';
+      const makeBtn = (val, label) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'attr-btn stage' + (String(val) === String(state.f.stage) ? ' active' : '') + (val === '' ? ' all' : '');
+        btn.dataset.stage = val === '' ? 'all' : String(val);
+        if (val === '') {
+          btn.textContent = '全部';
+        } else {
+          btn.style.setProperty('--ac', stageColor);
+          btn.style.setProperty('--abg', hexToRgba(stageColor, 0.12));
+          btn.innerHTML = `${label}阶`;
+        }
+        btn.addEventListener('click', () => {
+          if (String(state.f.stage) === String(val)) return;
+          state.f.stage = val;
+          stageBtnWrap.querySelectorAll('.attr-btn').forEach(b => b.classList.toggle('active', b.dataset.stage === (val === '' ? 'all' : String(val))));
+          render();
+        });
+        stageBtnWrap.appendChild(btn);
+      };
+      makeBtn('', '全部');
+      const stages = Array.from(new Set(state.sprites.map(s => (s.stages || []).length))).filter(n => n > 0).sort((a, b) => a - b);
+      stages.forEach(n => makeBtn(n, cn[n - 1]));
+    }
+
     async function load() {
       const [hv, ss] = await Promise.all([
         fetch(`${base}/data/high_value_sprites.json`).then(r => r.json()),
@@ -767,6 +797,7 @@ if (typeof caches !== 'undefined') {
       (ss.seasons || []).forEach(x => { state.seasonMap[x.id] = x.themeColor || '#666'; });
       renderAttrFilter();
       renderValueFilter();
+      renderStageFilter();
       render();
     }
 
@@ -774,6 +805,7 @@ if (typeof caches !== 'undefined') {
       let arr = state.sprites;
       if (state.f.attr) arr = arr.filter(s => s.attr === state.f.attr);
       if (state.f.value !== '') arr = arr.filter(s => Number(s.value) === Number(state.f.value));
+      if (state.f.stage !== '') arr = arr.filter(s => (s.stages || []).length === Number(state.f.stage));
       return arr;
     }
 
