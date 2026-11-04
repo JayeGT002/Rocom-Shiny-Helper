@@ -1,6 +1,11 @@
 {
   "seasons": [
     {
+      "id": "S5",
+      "name": "圣龙宝藏",
+      "themeColor": "#6B7280"
+    },
+    {
       "id": "S4",
       "name": "月涌狂想",
       "themeColor": "#B2BFD3"

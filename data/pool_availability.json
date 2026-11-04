@@ -8,7 +8,8 @@
         "S1": { "state": "available", "remark": "固定组合混池，永久可用" },
         "S2": { "state": "available", "remark": "固定组合混池，永久可用" },
         "S3": { "state": "available", "remark": "固定组合混池，永久可用" },
-        "S4": { "state": "available", "remark": "固定组合混池，永久可用" }
+        "S4": { "state": "available", "remark": "固定组合混池，永久可用" },
+        "S5": { "state": "available", "remark": "固定组合混池，永久可用" }
       },
       "notes": [
         "推荐放在S3新增区域的庇护所中。",
@@ -23,7 +24,8 @@
         "S1": { "state": "unavailable", "remark": "当季异色名单含电系精灵（拉特/粉星仔/双灯鱼）" },
         "S2": { "state": "available", "remark": "电系炫光迪迪属 S2 蛋组池（该机制暂不收录），不导致混池失效" },
         "S3": { "state": "available", "remark": "当季无异色名单无电系精灵" },
-        "S4": { "state": "available", "remark": "当季异色名单无电系精灵" }
+        "S4": { "state": "available", "remark": "当季异色名单无电系精灵" },
+        "S5": { "state": "available", "remark": "S5赛季名单无电系精灵" }
       },
       "notes": [
         "刷取方法见视频：[700小时捕鸟大王保姆级聚集教学 - UP主小洛克希月](https://www.bilibili.com/video/BV1LCgY6EEh7/)",
@@ -50,12 +52,27 @@
               "note": "S1赛季异色返场中"
             }
           ]
+        },
+        "S5": {
+          "state": "unavailable",
+          "remark": "S5无法通过捕捉月牙雪熊进入混池"
         }
       },
       "notes": [
         "推荐放在S3新增区域的庇护所中。",
         "放置拼装恐惧可以让月牙雪熊抱团。",
         "需要注意，如果要多开号放多个月牙雪熊果实，所有号的月牙雪熊需要放在同一个位置，否则月牙雪熊可能不会聚集在一个位置上。"
+      ]
+    },
+    {
+      "id": "weiwanchong",
+      "title": "未完虫",
+      "sprites": ["未完虫"],
+      "perSeason": {
+        "S5": { "state": "unavailable", "remark": "S5赛季包含幽系精灵小剪影，无法使用未完虫混池" }
+      },
+      "notes": [
+        "不推荐，只是因为它价值80星光值"
       ]
     }
   ]

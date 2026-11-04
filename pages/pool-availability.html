@@ -89,7 +89,7 @@
       <div class="page-head">
         <div class="page-title">
           <h1>混池可用性</h1>
-          <p class="page-sub">主流高星光值精灵「刷取混池」的可用状态查询 · 数据新鲜度：2026年9月8日（S4 赛季月涌狂想）</p>
+          <p class="page-sub">主流高星光值精灵「刷取混池」的可用状态查询 · 数据日期：2026年11月4日（S5 圣龙宝藏）</p>
         </div>
         <div class="season-select">
           <label for="pool-season-select">赛季选择</label>
@@ -139,7 +139,7 @@
       const LINK_RE = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
 
       // ==================== 状态 ====================
-      // 每个赛季三个混池的可用性由 data/pool_availability.json 手动确认，前端不做自动判定
+      // 每个赛季混池的可用性由 data/pool_availability.json 手动确认，前端不做自动判定
       const seasons = [];        // {id,name}
       const pools = [];          // data/pool_availability.json -> pools
       const hvMeta = {};         // 精灵名 -> 高星光值数据
@@ -237,7 +237,7 @@
             opt.textContent = `${s.id} ${s.name}`;
             select.appendChild(opt);
           });
-          const cur = seasons.find(s => s.id === 'S4');
+          const cur = seasons.find(s => s.id === 'S5');
           select.value = cur ? cur.id : (seasons[0] ? seasons[0].id : '');
 
           loading.style.display = 'none';

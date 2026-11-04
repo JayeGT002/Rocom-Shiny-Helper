@@ -208,6 +208,27 @@ if (typeof caches !== 'undefined') {
       return (d.pool || []).includes(attr) || (d.mechanism || []).includes(attr);
     }
 
+    function uniqueDirectableAttrs(sprite) {
+      const d = sprite.directable || {};
+      const attrs = new Set([
+        sprite.attr1,
+        sprite.attr2,
+        ...(d.pool || []),
+        ...(d.mechanism || [])
+      ].filter(Boolean));
+      const pool = new Set();
+      const mechanism = new Set();
+
+      attrs.forEach(attr => {
+        const hittable = currentSeasonData.sprites.filter(candidate => canHitAttr(candidate, attr));
+        if (hittable.length !== 1 || hittable[0] !== sprite) return;
+        if ((d.mechanism || []).includes(attr)) mechanism.add(attr);
+        else pool.add(attr);
+      });
+
+      return { pool, mechanism };
+    }
+
     // ==================== 渲染筛选区（完全通用） ====================
     function renderFilters() {
       const grid = document.getElementById('filter-grid');
@@ -387,17 +408,16 @@ if (typeof caches !== 'undefined') {
       // 地区形态提示（如刺轮砣双形态为相互独立的精灵）
       renderRegionHint(selectedData);
 
-      // 可定向信息：选中精灵可经「属性池」直接定向的属性 / 可经「赛季机制」近似定向的属性
+      // 只有属性池仅命中所选精灵时才标记为可定向；赛季机制按同一规则检查
       // （并入推荐属性池：在各属性池分组头用 tag 标注，不再单独列区块）
       const poolAttrs = new Set();
       const mechAttrs = new Set();
       let mechTag = null; // 赛季机制分组的标识（如 S4 金月/赤月），嵌在「赛季机制定向」tag 内
       selectedData.forEach(s => {
-        const d = s.directable;
-        if (!d) return;
-        (d.pool || []).forEach(a => poolAttrs.add(a));
-        if ((d.mechanism || []).length > 0) {
-          (d.mechanism).forEach(a => mechAttrs.add(a));
+        const directable = uniqueDirectableAttrs(s);
+        directable.pool.forEach(a => poolAttrs.add(a));
+        if (directable.mechanism.size > 0) {
+          directable.mechanism.forEach(a => mechAttrs.add(a));
           if (!mechTag) {
             const g = (currentSeasonData.filterGroups || []).find(g => g.key === s.group);
             if (g) mechTag = { text: g.badgeText || g.name, color: g.badgeColor || g.color };
@@ -405,7 +425,15 @@ if (typeof caches !== 'undefined') {
         }
       });
 
+      const excludedSpeciesNames = new Set(selectedData.map(s => s.name));
+      currentSeasonData.sprites
+        .filter(s => (s.group2 || s.group) === 'resident')
+        .forEach(s => excludedSpeciesNames.add(s.name));
       const recommend = highValueSprites
+        .filter(s => {
+          const relatedNames = [s.name, ...(s.stages || []), ...(s.forms || []).map(f => f.name)];
+          return !relatedNames.some(name => excludedSpeciesNames.has(name));
+        })
         .filter(s => hitAttrs.has(s.attr))
         .filter(s => !selectedAttr || s.attr === selectedAttr)
         .filter(s => seasonAllowed(s, currentSeasonData.season))

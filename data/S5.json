@@ -1,0 +1,108 @@
+{
+  "season": "S5",
+  "name": "圣龙宝藏",
+  "filterGroups": [
+    {
+      "key": "season",
+      "name": "赛季奇遇",
+      "color": "#e65100"
+    },
+    {
+      "key": "resident",
+      "name": "常驻异色",
+      "color": "#2e7d32"
+    }
+  ],
+  "categoryGroups": null,
+  "sprites": [
+    {
+      "name": "豆粒鹅",
+      "attr1": "冰",
+      "group": "season"
+    },
+    {
+      "name": "乐乐鲨",
+      "attr1": "水",
+      "group": "season"
+    },
+    {
+      "name": "西瓜虫",
+      "attr1": "虫",
+      "attr2": "草",
+      "group": "season"
+    },
+    {
+      "name": "滴溜豚",
+      "attr1": "毒",
+      "attr2": "幻",
+      "group": "season"
+    },
+    {
+      "name": "蛋包蛋",
+      "attr1": "普通",
+      "attr2": "萌",
+      "group": "season"
+    },
+    {
+      "name": "小剪影",
+      "attr1": "幽",
+      "group": "season"
+    },
+    {
+      "name": "鲸羽",
+      "attr1": "幻",
+      "attr2": "冰",
+      "group": "season"
+    },
+    {
+      "name": "蟹蟹椰",
+      "attr1": "水",
+      "attr2": "草",
+      "group": "season"
+    },
+    {
+      "name": "可爱猿",
+      "attr1": "火",
+      "group": "resident"
+    },
+    {
+      "name": "深蓝鲸",
+      "attr1": "水",
+      "group": "resident"
+    },
+    {
+      "name": "吸泥鸥",
+      "attr1": "地",
+      "attr2": "翼",
+      "group": "resident"
+    },
+    {
+      "name": "花怨鳗",
+      "attr1": "地",
+      "attr2": "草",
+      "group": "resident"
+    },
+    {
+      "name": "小翼龙",
+      "attr1": "龙",
+      "attr2": "翼",
+      "group": "resident"
+    },
+    {
+      "name": "伊雷龙",
+      "attr1": "龙",
+      "group": "resident"
+    },
+    {
+      "name": "锤头鹳",
+      "attr1": "翼",
+      "attr2": "水",
+      "group": "resident"
+    },
+    {
+      "name": "缇塔",
+      "attr1": "机械",
+      "group": "resident"
+    }
+  ]
+}

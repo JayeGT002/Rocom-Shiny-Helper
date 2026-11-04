@@ -523,8 +523,7 @@
       "mixPool": "",
       "coin": 6000,
       "obtain": "S4赛季奇遇作业获取",
-      "attrFull": "光/水",
-      "note": "果实暂未开放获取"
+      "attrFull": "光/水"
     },
     {
       "name": "未完虫",
@@ -539,8 +538,7 @@
       "mixPool": "",
       "coin": 6000,
       "obtain": "S4赛季奇遇作业获取",
-      "attrFull": "幽/虫",
-      "note": "果实暂未开放获取"
+      "attrFull": "幽/虫"
     },
     {
       "name": "星星眼",
@@ -555,8 +553,7 @@
       "mixPool": "",
       "coin": 4500,
       "obtain": "S4赛季奇遇作业获取",
-      "attrFull": "幻",
-      "note": "果实暂未开放获取"
+      "attrFull": "幻"
     },
     {
       "name": "电企鹅",

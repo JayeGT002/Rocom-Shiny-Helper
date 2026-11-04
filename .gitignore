@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 *.log
 .DS_Store
+/.asset-stage/
 
 # 非站点运行所需的本地数据源/脚本/文档/素材（不入库）
 /工作簿1.xlsx
