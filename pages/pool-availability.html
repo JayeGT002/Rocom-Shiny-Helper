@@ -186,7 +186,7 @@
         const notes = (pool.notes || []).filter(n => String(n).trim());
         if (!notes.length) return '';
         const lis = notes.map(text => {
-          const html = ESC(text).replace(LINK_RE, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+          const html = ESC(text).replace(LINK_RE, (_, label, url) => `<a href="${url}" target="_blank" rel="noopener">${label}</a>`);
           return `<li>${html}</li>`;
         }).join('');
         return `
