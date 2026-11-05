@@ -340,7 +340,7 @@ if (typeof caches !== 'undefined') {
           <span class="sprite-attrs">${attrsHtml}</span>
         `;
 
-        // 占位符控制 + 常规/异色图交替（清单驱动，仅 S1~S3 有异色图）
+        // 占位符控制 + 常规/异色图交替（清单驱动，S1~S4 有异色图）
         const wrapEl = label.querySelector('.sprite-img-wrap');
         const imgEl = wrapEl.querySelector('.sprite-img');
         bindPlaceholder(wrapEl, imgEl);
@@ -580,7 +580,7 @@ if (typeof caches !== 'undefined') {
       img.addEventListener('error', () => wrap.classList.remove('has-img'));
     }
 
-    // ==================== 常规/异色图交替（S1~S3，双图交叠平滑过渡） ====================
+    // ==================== 常规/异色图交替（S1~S4，双图交叠平滑过渡） ====================
     // 异色图清单由 data/yise_images.json 驱动，仅在清单内的精灵启用交替，
     // 避免对不存在异色图的精灵产生 404 请求噪音；未来赛季更新只需补充清单。
     // 实现：容器内叠加两层 <img>（常规图/异色图各一层，均已预载），到点后仅切换两层
